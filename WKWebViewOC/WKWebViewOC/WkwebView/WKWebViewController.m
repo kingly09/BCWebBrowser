@@ -273,7 +273,7 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
         // 调用使用JS发送POST请求的方法
         [self postRequestWithJS];
         // 提示一个框
-        [self alertRequestWithJS];
+        //[self alertRequestWithJS];
         // 将Flag置为NO（后面就不需要加载了）
         self.needLoadJSPOST = NO;
     }
