@@ -3,28 +3,8 @@
 //  WKWebViewOC
 
 #import "WKWebViewController.h"
-
 #import <WebKit/WKWebView.h>
 #import <WebKit/WebKit.h>
-
-#define POST_JS @"function my_post(path, params) {\
-var method = \"POST\";\
-var form = document.createElement(\"form\");\
-form.setAttribute(\"method\", method);\
-form.setAttribute(\"action\", path);\
-for(var key in params){\
-if (params.hasOwnProperty(key)) {\
-var hiddenFild = document.createElement(\"input\");\
-hiddenFild.setAttribute(\"type\", \"hidden\");\
-hiddenFild.setAttribute(\"name\", key);\
-hiddenFild.setAttribute(\"value\", params[key]);\
-}\
-form.appendChild(hiddenFild);\
-}\
-document.body.appendChild(form);\
-form.submit();\
-}"
-
 
 typedef enum{
     loadWebURLString = 0,
@@ -108,56 +88,12 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
     [self.wkWebView removeObserver:self forKeyPath:NSStringFromSelector(@selector(estimatedProgress))];
 }
 
-
-- (void)roadLoadClicked{
-    [self.wkWebView reload];
-}
-
--(void)customBackItemClicked{
-    if (self.wkWebView.goBack) {
-        [self.wkWebView goBack];
-    }else{
-       [self.navigationController popViewControllerAnimated:YES];
-    }
-}
--(void)closeItemClicked{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-#pragma mark - 初始化URL
-- (void)loadWebURLSring:(NSString *)string{
-    self.URLString = string;
-    self.loadType = loadWebURLString;
-}
-
-- (void)loadWebHTMLSring:(NSString *)string{
-    self.URLString = string;
-    self.loadType = loadWebHTMLString;
-}
-
-- (void)POSTWebURLSring:(NSString *)string postData:(NSString *)postData{
-    self.URLString = string;
-    self.postData = postData;
-    self.loadType = POSTWebURLString;
-}
-
--(void)automaticLoginWebURLSring:(NSString *)string injectJSCode:(NSString *)JSCode {
-    
-    self.URLString    = string;
-    self.injectJSCode = JSCode;
-    self.loadType     = automaticLoginWebURLSring;
-    
-}
-
-#pragma mark ================ 加载方式 ================
+#pragma mark - 加载方式／私有方法
 
 - (void)webViewloadURLType{
     switch (self.loadType) {
         case loadWebURLString:{
-            //创建一个NSURLRequest 的对象
-            NSURLRequest * Request_zsj = [NSURLRequest requestWithURL:[NSURL URLWithString:self.URLString] cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30];
-            //加载网页
-            [self.wkWebView loadRequest:Request_zsj];
+            [self loadWebWithURLString:self.URLString];
             break;
         }
         case loadWebHTMLString:{
@@ -175,11 +111,19 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
         case automaticLoginWebURLSring:{
             //为真的时候会调用JS的注入js代码
             self.needInjectJS = YES;
+            [self loadWebWithURLString:self.URLString];
             break;
         }
     }
 }
-
+// 加载一个WEB的URL地址网页
+-(void) loadWebWithURLString:(NSString *)url {
+    //创建一个NSURLRequest 的对象,加入缓存机制，缓存时间为30s
+    NSURLRequest * Request_zsj = [NSURLRequest requestWithURL:[NSURL URLWithString:self.URLString] cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30];
+    //加载网页
+    [self.wkWebView loadRequest:Request_zsj];
+}
+// 加载一个本地HTML网页
 - (void)loadHostPathURL:(NSString *)url{
     //获取JS所在的路径
     NSString *path = [[NSBundle mainBundle] pathForResource:url ofType:@"html"];
@@ -198,7 +142,7 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
     }];
 }
 
-// 调用JS发送POST请求
+// 调用JS发送提示框请求
 - (void)alertRequestWithJS {
     // 拼装成调用JavaScript的字符串
     NSString *jscript = [NSString stringWithFormat:@"testAlert();"];
@@ -209,53 +153,37 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
 }
 // 调用JS发送注入js代码请求
 -(void)requestInjectJSCode {
+    if (self.injectJSCode.length == 0 || self.injectJSCode == nil) {
+        return;
+    }
     //设置JS
-    NSString *inputValueJS = @"var psel = document.getElementById('uin');psel.value = '测试自动输入账号121';var pswd = document.getElementById('pwd');pswd.value = '123';";
+//    NSString *inputValueJS = @"var psel = document.getElementById('uin');psel.value = '测试自动输入账号121';var pswd = document.getElementById('pwd');pswd.value = '123';";
 //    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         //执行JS
-        [self.wkWebView evaluateJavaScript:inputValueJS completionHandler:^(id _Nullable response, NSError * _Nullable error) {
+        [self.wkWebView evaluateJavaScript:self.injectJSCode completionHandler:^(id _Nullable response, NSError * _Nullable error) {
             NSLog(@"value: %@ error: %@", response, error);
         }];
 //    });
 }
 
+#pragma mark - 点击事件
 
+- (void)roadLoadClicked{
+    [self.wkWebView reload];
+}
 
-//#pragma mark   ============== URL pay 开始支付 ==============
-//
-//- (void)payWithUrlOrder:(NSString*)urlOrder
-//{
-//    if (urlOrder.length > 0) {
-//        __weak XFWkwebView* wself = self;
-//        [[AlipaySDK defaultService] payUrlOrder:urlOrder fromScheme:@"giftcardios" callback:^(NSDictionary* result) {
-//            // 处理支付结果
-//            NSLog(@"===============%@", result);
-//            // isProcessUrlPay 代表 支付宝已经处理该URL
-//            if ([result[@"isProcessUrlPay"] boolValue]) {
-//                // returnUrl 代表 第三方App需要跳转的成功页URL
-//                NSString* urlStr = result[@"returnUrl"];
-//                [wself loadWithUrlStr:urlStr];
-//            }
-//        }];
-//    }
-//}
-//
-//- (void)WXPayWithParam:(NSDictionary *)WXparam{
-//
-//}
-////url支付成功回调地址
-//- (void)loadWithUrlStr:(NSString*)urlStr
-//{
-//    if (urlStr.length > 0) {
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            NSURLRequest *webRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:urlStr] cachePolicy:NSURLRequestReturnCacheDataElseLoad
-//                                                    timeoutInterval:15];
-//            [self.wkWebView loadRequest:webRequest];
-//        });
-//    }
-//}
+-(void)customBackItemClicked{
+    if (self.wkWebView.goBack) {
+        [self.wkWebView goBack];
+    }else{
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+-(void)closeItemClicked{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
-#pragma mark ================ 自定义返回/关闭按钮 ================
+#pragma mark - 自定义返回/关闭按钮
 
 -(void)updateNavigationItems{
     if (self.wkWebView.canGoBack) {
@@ -288,7 +216,8 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
      @{@"request":request,@"snapShotView":currentSnapShotView}];
 }
 
-#pragma mark ================ WKNavigationDelegate ================
+
+#pragma mark - WKNavigationDelegate
 
 //这个是网页加载完成，导航的变化
 -(void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation{
@@ -307,6 +236,12 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
     }
     // 获取加载网页的标题
     self.title = self.wkWebView.title;
+    // 是否需要注入js（仅注入一次）
+    if (self.needInjectJS) {
+        [self requestInjectJSCode];
+        // 将Flag置为NO（后面就不需要加载了）
+        self.needInjectJS = NO;
+    }
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     [self updateNavigationItems];
 }
@@ -408,7 +343,7 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
     
 }
 
-#pragma mark - WKUIDelegate 
+#pragma mark - WKUIDelegate
 
 // 获取js 里面的提示
 -(void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(void))completionHandler{
@@ -574,5 +509,30 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
     return _snapShotsArray;
 }
 
+#pragma mark - 初始化URL/对外扩展方法
+
+- (void)loadWebURLSring:(NSString *)string{
+    self.URLString = string;
+    self.loadType = loadWebURLString;
+}
+
+- (void)loadWebHTMLSring:(NSString *)string{
+    self.URLString = string;
+    self.loadType = loadWebHTMLString;
+}
+
+- (void)POSTWebURLSring:(NSString *)string postData:(NSString *)postData{
+    self.URLString = string;
+    self.postData = postData;
+    self.loadType = POSTWebURLString;
+}
+
+-(void)automaticLoginWebURLSring:(NSString *)string injectJSCode:(NSString *)JSCode {
+    
+    self.URLString    = string;
+    self.injectJSCode = JSCode;
+    self.loadType     = automaticLoginWebURLSring;
+    
+}
 
 @end

@@ -32,5 +32,12 @@
  */
 - (void)POSTWebURLSring:(NSString *)string postData:(NSString *)postData;
 
+/**
+ 加载自动登录的链接请求，注入js代码
+
+ @param string 需要登录的表单地址
+ @param JSCode 需要植入的js代码,注意js代码不能加入空格 例如： @"var psel = document.getElementById(\"uin\");psel.value = \"测试自动输入账号121\";var pswd = document.getElementById(\"pwd\");pswd.value = '123';"
+ */
+-(void)automaticLoginWebURLSring:(NSString *)string injectJSCode:(NSString *)JSCode;
 
 @end
