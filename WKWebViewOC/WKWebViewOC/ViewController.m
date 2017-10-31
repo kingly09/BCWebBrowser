@@ -28,6 +28,8 @@ form.submit();\
 @interface ViewController ()<UISearchBarDelegate>
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (assign,nonatomic) BOOL isPost;
+//设置字体大小
+@property(nonatomic,assign) float minimumFontSize;
 @end
 
 @implementation ViewController
@@ -49,6 +51,7 @@ form.submit();\
     NSString *postData = @"{\"name\": \"libin\",\"password\": \"libin\"}";
     WKWebViewController *web = [[WKWebViewController alloc] init];
     [web POSTWebURLSring:_searchBar.text postData:postData];
+    [web setupMinimumFontSize:self.minimumFontSize];
     [self.navigationController pushViewController:web animated:YES];
 }
 
@@ -62,6 +65,7 @@ form.submit();\
     WKWebViewController *web = [[WKWebViewController alloc] init];
     NSString *inputValueJS = @"var psel = document.getElementById('uin');psel.value = '测试自动输入账号121';var pswd = document.getElementById('pwd');pswd.value = '123';";
     [web automaticLoginWebURLSring:@"https://m.exmail.qq.com/cgi-bin/loginpage" injectJSCode:inputValueJS];
+    [web setupMinimumFontSize:self.minimumFontSize];
     [self.navigationController pushViewController:web animated:YES];
 }
 
@@ -70,8 +74,9 @@ form.submit();\
 
  @param sender 设置文字的大小
  */
-- (IBAction)siderChange:(id)sender {
-
+- (IBAction)siderChange:(UISlider *)sender {
+   
+    self.minimumFontSize = sender.value;
 }
 /**
  读取本地的HTML文件
@@ -80,6 +85,7 @@ form.submit();\
     
     WKWebViewController *web = [[WKWebViewController alloc] init];
     [web loadLocalWebHTMLString:@"test"];
+    [web setupMinimumFontSize:self.minimumFontSize];
     [self.navigationController pushViewController:web animated:YES];    
 }
 
@@ -88,6 +94,7 @@ form.submit();\
     
     WKWebViewController *web = [[WKWebViewController alloc] init];
     [web loadWebURLSring:searchBar.text];
+    [web setupMinimumFontSize:self.minimumFontSize];
     [self.navigationController pushViewController:web animated:YES];
 
 }

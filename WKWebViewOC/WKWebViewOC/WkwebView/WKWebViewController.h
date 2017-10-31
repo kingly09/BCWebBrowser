@@ -40,4 +40,11 @@
  */
 -(void)automaticLoginWebURLSring:(NSString *)string injectJSCode:(NSString *)JSCode;
 
+/**
+ 设置web网页的HTM内容的字体的大小
+
+ @param fontSize 字体大小
+ */
+-(void)setupMinimumFontSize:(float)fontSize;
+
 @end

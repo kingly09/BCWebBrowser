@@ -30,6 +30,8 @@ UIScrollViewDelegate>
 @property(nonatomic,assign) BOOL needLoadJSPOST;
 //是否需要注入js代码
 @property(nonatomic,assign) BOOL needInjectJS;
+//设置字体大小
+@property(nonatomic,assign) float minimumFontSize;
 //网页加载的类型
 @property(nonatomic,assign) wkWebLoadType loadType;
 //保存的网址链接
@@ -541,6 +543,12 @@ UIScrollViewDelegate>
     self.loadType     = automaticLoginWebURLSring;
     
 }
+
+-(void)setupMinimumFontSize:(float)fontSize {
+    
+    self.minimumFontSize = fontSize;
+}
+
 #pragma mark - setter and getter 方法
 #pragma mark - 懒加载
 
@@ -561,7 +569,7 @@ UIScrollViewDelegate>
         // 创建设置对象
         WKPreferences *preference = [[WKPreferences alloc]init];
         // 设置字体大小(最小的字体大小)
-        preference.minimumFontSize = 0;
+        preference.minimumFontSize = self.minimumFontSize;
         // 设置偏好设置对象
         Configuration.preferences = preference;
         
