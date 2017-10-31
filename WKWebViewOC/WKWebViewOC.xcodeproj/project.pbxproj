@@ -65,6 +65,8 @@
 		BC3680EB1FA855AA007D2358 /* test.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = test.html; sourceTree = "<group>"; };
 		BC3680ED1FA8668B007D2358 /* BCObjectiveCJSHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BCObjectiveCJSHelper.h; sourceTree = "<group>"; };
 		BC3680EE1FA8668B007D2358 /* BCObjectiveCJSHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BCObjectiveCJSHelper.m; sourceTree = "<group>"; };
+		BC3680F11FA877A0007D2358 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		BC3680F21FA877A9007D2358 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 				3AE0BC891E1D570F0013055C /* WKWebViewOCTests */,
 				3AE0BC941E1D570F0013055C /* WKWebViewOCUITests */,
 				3AE0BC6E1E1D570F0013055C /* Products */,
+				BC3680F01FA877A0007D2358 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -168,6 +171,15 @@
 				BC3680EE1FA8668B007D2358 /* BCObjectiveCJSHelper.m */,
 			);
 			path = WkwebView;
+			sourceTree = "<group>";
+		};
+		BC3680F01FA877A0007D2358 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BC3680F21FA877A9007D2358 /* AddressBookUI.framework */,
+				BC3680F11FA877A0007D2358 /* AddressBook.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

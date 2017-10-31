@@ -7,8 +7,9 @@
 //
 
 #import "BCObjectiveCJSHelper.h"
+#import <AddressBookUI/AddressBookUI.h>
 
-@interface BCObjectiveCJSHelper()<UINavigationControllerDelegate,UIImagePickerControllerDelegate>
+@interface BCObjectiveCJSHelper()<UINavigationControllerDelegate,UIImagePickerControllerDelegate,ABPeoplePickerNavigationControllerDelegate>
 @property (nonatomic, weak) UIViewController *vc;
 @end
 
@@ -47,7 +48,11 @@
                 NSLog(@"打开摄像头");
                 [self openCamera];
                 return;
-            }  else {
+            }else if ([code isEqualToString:@"0003"]) {
+                NSLog(@"打开通讯录");
+                [self openAddressBook];
+                return;
+            }else {
                 return;
             }
         });
@@ -79,8 +84,13 @@
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
-    [picker  dismissViewControllerAnimated:YES completion:nil];
+   
     NSLog(@"%@",info);
+    NSString *deviceId = [NSString stringWithFormat:@"该相册信息成功"];
+    NSString *js = [NSString stringWithFormat:@"globalCallback(\'%@\')", deviceId];
+    [self.webView evaluateJavaScript:js completionHandler:nil];
+    
+   [picker  dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
@@ -88,6 +98,63 @@
     [picker dismissViewControllerAnimated:YES completion:^{
         
     }];
+}
+
+#pragma mark - 打开通讯录
+
+-(void)openAddressBook {
+    
+    ABPeoplePickerNavigationController *picker =[[ABPeoplePickerNavigationController alloc] init];
+    picker.peoplePickerDelegate = self;
+    [self.vc  presentViewController:picker animated:YES completion:nil];
+}
+
+//这个方法在用户取消选择时调用
+- (void)peoplePickerNavigationControllerDidCancel:(ABPeoplePickerNavigationController *)peoplePicker
+{
+    [self.vc dismissViewControllerAnimated:YES completion:^{}];
+}
+
+//这个方法在用户选择一个联系人后调用
+-(void)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker didSelectPerson:(ABRecordRef)person{
+    [self displayPerson:person];
+    [self.vc dismissViewControllerAnimated:YES completion:^{}];
+}
+
+//获得选中person的信息
+- (void)displayPerson:(ABRecordRef)person
+{
+    NSString *firstName = (__bridge_transfer NSString*)ABRecordCopyValue(person, kABPersonFirstNameProperty);
+    NSString *middleName = (__bridge_transfer NSString*)ABRecordCopyValue(person, kABPersonMiddleNameProperty);
+    NSString *lastname = (__bridge_transfer NSString*)ABRecordCopyValue(person, kABPersonLastNameProperty);
+    NSMutableString *nameStr = [NSMutableString string];
+    if (lastname!=nil) {
+        [nameStr appendString:lastname];
+    }
+    if (middleName!=nil) {
+        [nameStr appendString:middleName];
+    }
+    if (firstName!=nil) {
+        [nameStr appendString:firstName];
+    }
+    
+    NSString* phone = nil;
+    ABMultiValueRef phoneNumbers = ABRecordCopyValue(person,kABPersonPhoneProperty);
+    if (ABMultiValueGetCount(phoneNumbers) > 0) {
+        phone = (__bridge_transfer NSString*)ABMultiValueCopyValueAtIndex(phoneNumbers, 0);
+    } else {
+        phone = @"[None]";
+    }
+    
+    //可以把-、+86、空格这些过滤掉
+    NSString *phoneStr = [phone stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    phoneStr = [phoneStr stringByReplacingOccurrencesOfString:@"+86" withString:@""];
+    phoneStr = [phoneStr stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+    NSString *deviceId = [NSString stringWithFormat:@"该%@的电话号码:%@",nameStr,phone];
+    NSString *js = [NSString stringWithFormat:@"globalCallback(\'%@\')", deviceId];
+    [self.webView evaluateJavaScript:js completionHandler:nil];
+   
 }
 
 //- (NSString *)UUID {

@@ -36,35 +36,40 @@
   <li onclick="popTextInputPanel()">弹输入框</li>
   <li onclick="getDeviceId()">获取设备ID</li>
   <li onclick="openCamera()">打开app的摄像头</li>
-  
+  <li onclick="openAddressBook()">打开app的通讯录</li>
 </ul>
 <div id="temp"></div>
 
 <script>
-  // 弹提示框
-  function popAlertPanel() {
-      alert("提示框");
-  }
-  // 弹确认框
-  function popConfirmPanel() {
-      var ok = confirm("确认框");
-      document.getElementById('temp').innerHTML = ok;
-  }
-  // 弹输入框
-  function popTextInputPanel() {
-      var tel = prompt("输入框","请输入手机号");
-      document.getElementById('temp').innerHTML = tel;
-  }
+    // 弹提示框
+    function popAlertPanel() {
+        alert("提示框");
+    }
+// 弹确认框
+function popConfirmPanel() {
+    var ok = confirm("确认框");
+    document.getElementById('temp').innerHTML = ok;
+}
+// 弹输入框
+function popTextInputPanel() {
+    var tel = prompt("输入框","请输入手机号");
+    document.getElementById('temp').innerHTML = tel;
+}
 
-  // 获取设备ID
-  function getDeviceId() {
-      window.webkit.messageHandlers.timefor.postMessage({code: '0001', functionName: 'getdevideId'});
-  }
+// 获取设备ID
+function getDeviceId() {
+    window.webkit.messageHandlers.timefor.postMessage({code: '0001', functionName: 'getdevideId'});
+}
 
-  //打开摄像头
-  function openCamera(){
-     window.webkit.messageHandlers.timefor.postMessage({code: '0002', functionName: 'openCamera'});
-  }
+//打开摄像头
+function openCamera(){
+    window.webkit.messageHandlers.timefor.postMessage({code: '0002', functionName: 'openCamera'});
+}
+
+//打开摄像头
+function openAddressBook(){
+    window.webkit.messageHandlers.timefor.postMessage({code: '0003', functionName: 'openAddressBook'});
+}
 
 </script>
 </body>
