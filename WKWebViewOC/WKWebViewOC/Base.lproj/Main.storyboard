@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -22,15 +23,43 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nKo-4I-ZSS">
-                                <rect key="frame" x="220.5" y="170" width="132" height="30"/>
+                                <rect key="frame" x="221" y="147" width="132" height="30"/>
                                 <state key="normal" title="POST请求跳转界面"/>
                                 <connections>
                                     <action selector="loadingAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cyP-Sd-MaC"/>
                                 </connections>
                             </button>
-                            <searchBar contentMode="redraw" fixedFrame="YES" text="http://www.baidu.com" translatesAutoresizingMaskIntoConstraints="NO" id="eeS-7m-hcP">
-                                <rect key="frame" x="0.0" y="91" width="375" height="56"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kuz-Ad-abn">
+                                <rect key="frame" x="16" y="211" width="114" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="腾讯企业邮箱"/>
+                                <connections>
+                                    <action selector="OnClickQiyeEmail:" destination="BYZ-38-t0r" eventType="touchUpInside" id="BUY-uv-iT0"/>
+                                </connections>
+                            </button>
+                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="9o1-ia-4bT">
+                                <rect key="frame" x="25" y="249" width="230" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="siderChange:" destination="BYZ-38-t0r" eventType="valueChanged" id="s2T-V4-mrC"/>
+                                </connections>
+                            </slider>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="设置字体大小" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MJR-KI-0kn">
+                                <rect key="frame" x="267" y="253" width="90" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5LM-ft-6qZ">
+                                <rect key="frame" x="204" y="208" width="149" height="30"/>
+                                <state key="normal" title="读取本地的HTML文件"/>
+                                <connections>
+                                    <action selector="onClicklocalHtml:" destination="BYZ-38-t0r" eventType="touchUpInside" id="xVi-L7-zyW"/>
+                                </connections>
+                            </button>
+                            <searchBar contentMode="redraw" text="http://www.baidu.com" translatesAutoresizingMaskIntoConstraints="NO" id="eeS-7m-hcP">
+                                <rect key="frame" x="0.0" y="64" width="375" height="56"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <scopeButtonTitles>
                                     <string>Title</string>
@@ -40,19 +69,18 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="Dzf-Yz-rWF"/>
                                 </connections>
                             </searchBar>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kuz-Ad-abn">
-                                <rect key="frame" x="16" y="211" width="114" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="腾讯企业邮箱"/>
-                                <connections>
-                                    <action selector="OnClickQiyeEmail:" destination="BYZ-38-t0r" eventType="touchUpInside" id="BUY-uv-iT0"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="nKo-4I-ZSS" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="-148.5" id="Gox-5R-gC5"/>
-                            <constraint firstItem="nKo-4I-ZSS" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" constant="99" id="yTh-UQ-002"/>
+                            <constraint firstAttribute="trailing" secondItem="eeS-7m-hcP" secondAttribute="trailing" id="BPu-um-Dcz"/>
+                            <constraint firstItem="5LM-ft-6qZ" firstAttribute="top" secondItem="nKo-4I-ZSS" secondAttribute="bottom" constant="31" id="K6o-eA-Bni"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="nKo-4I-ZSS" secondAttribute="trailing" constant="6" id="Q0a-Dc-OPB"/>
+                            <constraint firstItem="nKo-4I-ZSS" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="147" id="Wrp-Zh-9EF"/>
+                            <constraint firstItem="nKo-4I-ZSS" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" symbolic="YES" id="ZJK-A1-kpS"/>
+                            <constraint firstItem="5LM-ft-6qZ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" symbolic="YES" id="epg-gR-CUg"/>
+                            <constraint firstItem="eeS-7m-hcP" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="rVN-Bn-dnP"/>
+                            <constraint firstItem="eeS-7m-hcP" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="thE-vd-3O4"/>
+                            <constraint firstItem="nKo-4I-ZSS" firstAttribute="trailing" secondItem="5LM-ft-6qZ" secondAttribute="trailing" id="uFL-AS-DhR"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="W3T-Ro-a2R"/>

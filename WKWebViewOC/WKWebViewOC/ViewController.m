@@ -65,6 +65,23 @@ form.submit();\
     [self.navigationController pushViewController:web animated:YES];
 }
 
+/**
+ 设置字体的大小
+
+ @param sender 设置文字的大小
+ */
+- (IBAction)siderChange:(id)sender {
+
+}
+/**
+ 读取本地的HTML文件
+ */
+- (IBAction)onClicklocalHtml:(id)sender {
+    
+    WKWebViewController *web = [[WKWebViewController alloc] init];
+    [web loadLocalWebHTMLString:@"test"];
+    [self.navigationController pushViewController:web animated:YES];    
+}
 
 #pragma mark 点击search跳到搜索结果页
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {

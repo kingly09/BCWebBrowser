@@ -21,7 +21,7 @@
  
  @param string 本地HTML文件名
  */
-- (void)loadWebHTMLSring:(NSString *)string;
+- (void)loadLocalWebHTMLString:(NSString *)string;
 
 /**
  加载外部链接POST请求(注意检查 XFWKJSPOST.html 文件是否存在 )

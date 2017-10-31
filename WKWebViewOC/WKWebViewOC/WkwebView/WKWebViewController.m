@@ -8,14 +8,20 @@
 
 typedef enum{
     loadWebURLString = 0,
-    loadWebHTMLString,
+    loadLocalWebHTMLString,
     POSTWebURLString,
     automaticLoginWebURLSring,
 }wkWebLoadType;
 
 static void *WkwebBrowserContext = &WkwebBrowserContext;
 
-@interface WKWebViewController ()<WKNavigationDelegate,WKUIDelegate,WKScriptMessageHandler,UINavigationControllerDelegate,UINavigationBarDelegate>
+@interface WKWebViewController ()
+<WKNavigationDelegate,
+WKUIDelegate,
+WKScriptMessageHandler,
+UINavigationControllerDelegate,
+UINavigationBarDelegate,
+UIScrollViewDelegate>
 
 @property (nonatomic, strong) WKWebView *wkWebView;
 //设置加载进度条
@@ -86,6 +92,8 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
 //注意，观察的移除
 -(void)dealloc {
     [self.wkWebView removeObserver:self forKeyPath:NSStringFromSelector(@selector(estimatedProgress))];
+    [self.wkWebView removeObserver:self forKeyPath:@"title"];
+    [self.wkWebView.configuration.userContentController removeScriptMessageHandlerForName:@"WXPay"];
 }
 
 
@@ -139,16 +147,16 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
             [self loadWebWithURLString:self.URLString];
             break;
         }
-        case loadWebHTMLString:{
+        case loadLocalWebHTMLString:{
             //加载本地的HTML
-            [self loadHostPathURL:self.URLString];
+            [self loadLocalHtmlString:self.URLString];
             break;
         }
         case POSTWebURLString:{
             //JS发送POST的Flag，为真的时候会调用JS的POST方法
             self.needLoadJSPOST = YES;
             //POST使用预先加载本地JS方法的html实现，请确认WKJSPOST存在
-            [self loadHostPathURL:@"WKJSPOST"];
+            [self loadLocalHtmlString:@"WKJSPOST"];
             break;
         }
         case automaticLoginWebURLSring:{
@@ -167,7 +175,7 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
     [self.wkWebView loadRequest:Request_zsj];
 }
 // 加载一个本地HTML网页
-- (void)loadHostPathURL:(NSString *)url{
+- (void)loadLocalHtmlString:(NSString *)url{
     //获取JS所在的路径
     NSString *path = [[NSBundle mainBundle] pathForResource:url ofType:@"html"];
     //获得html内容
@@ -255,7 +263,7 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
     
     //如果url是很奇怪的就不push
     if ([request.URL.absoluteString isEqualToString:@"about:blank"]) {
-        //        NSLog(@"about blank!! return");
+        NSLog(@"about blank!! return");
         return;
     }
    
@@ -266,6 +274,30 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
     UIView* currentSnapShotView = [self.wkWebView snapshotViewAfterScreenUpdates:YES];
     [self.snapShotsArray addObject:
      @{@"request":request,@"snapShotView":currentSnapShotView}];
+}
+#pragma mark - KVO监听事件
+//KVO监听进度条
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    
+    if ([keyPath isEqualToString:NSStringFromSelector(@selector(estimatedProgress))] && object == self.wkWebView) {
+        [self.progressView setAlpha:1.0f];
+        BOOL animated = self.wkWebView.estimatedProgress > self.progressView.progress;
+        [self.progressView setProgress:self.wkWebView.estimatedProgress animated:animated];
+        
+        // Once complete, fade out UIProgressView
+        if(self.wkWebView.estimatedProgress >= 1.0f) {
+            [UIView animateWithDuration:0.3f delay:0.3f options:UIViewAnimationOptionCurveEaseOut animations:^{
+                [self.progressView setAlpha:0.0f];
+            } completion:^(BOOL finished) {
+                [self.progressView setProgress:0.0f animated:NO];
+                
+            }];
+        }
+    }else if ([keyPath isEqualToString:@"title"]) {
+        self.title = self.wkWebView.title;
+    }else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
 }
 
 #pragma mark - 委托方法
@@ -317,7 +349,7 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
      NSLog(@"接收到服务器重新配置请求之后再执行");
 }
 
-//API是根据WebView对于即将跳转的HTTP请求头信息和相关信息来决定是否跳转
+//API是根据WebView对于即将跳转的HTTP请求头信息和相关信息来决定是否跳转（在发送请求之前，决定是否跳转）
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
     
     NSLog(@"API是根据WebView对于即将跳转的HTTP请求头信息和相关信息来决定是否跳转");
@@ -450,39 +482,24 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
 // 在原生输入得到文本内容后，通过completionHandler回调给JS 大家注意这个回调的completionHandler参数是字符串
 -(void)webView:(WKWebView *)webView runJavaScriptTextInputPanelWithPrompt:(NSString *)prompt defaultText:(NSString *)defaultText initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(NSString * _Nullable))completionHandler {
     
-//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"textinput" message:@"JS调用输入框" preferredStyle:UIAlertControllerStyleAlert];
-//    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-//        textField.textColor = [UIColor redColor];
-//    }];
-//    [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//        completionHandler([[alert.textFields lastObject] text]);
-//    }]];
-//
-//    [self presentViewController:alert animated:YES completion:NULL];
-    completionHandler(@"http");
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"输入框" message:prompt preferredStyle:UIAlertControllerStyleAlert];
+    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.textColor = [UIColor blackColor];
+        textField.placeholder = defaultText;
+    }];
+    [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        completionHandler([[alert.textFields lastObject] text]);
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        completionHandler(nil);
+    }]];
+    [self presentViewController:alert animated:YES completion:NULL];
 }
 
-//KVO监听进度条
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    
-    if ([keyPath isEqualToString:NSStringFromSelector(@selector(estimatedProgress))] && object == self.wkWebView) {
-        [self.progressView setAlpha:1.0f];
-        BOOL animated = self.wkWebView.estimatedProgress > self.progressView.progress;
-        [self.progressView setProgress:self.wkWebView.estimatedProgress animated:animated];
-        
-        // Once complete, fade out UIProgressView
-        if(self.wkWebView.estimatedProgress >= 1.0f) {
-            [UIView animateWithDuration:0.3f delay:0.3f options:UIViewAnimationOptionCurveEaseOut animations:^{
-                [self.progressView setAlpha:0.0f];
-            } completion:^(BOOL finished) {
-                [self.progressView setProgress:0.0f animated:NO];
-                
-            }];
-        }
-    }
-    else {
-        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-    }
+#pragma mark - UIScrollViewDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+   
+
 }
 
 #pragma mark - WKScriptMessageHandler 拦截执行网页中的JS方法
@@ -506,9 +523,9 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
     self.loadType = loadWebURLString;
 }
 
-- (void)loadWebHTMLSring:(NSString *)string{
+- (void)loadLocalWebHTMLString:(NSString *)string{
     self.URLString = string;
-    self.loadType = loadWebHTMLString;
+    self.loadType = loadLocalWebHTMLString;
 }
 
 - (void)POSTWebURLSring:(NSString *)string postData:(NSString *)postData{
@@ -540,6 +557,7 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
        }else{
             Configuration.allowsInlineMediaPlayback = NO;
        }
+        Configuration.allowsInlineMediaPlayback = YES;
         // 创建设置对象
         WKPreferences *preference = [[WKPreferences alloc]init];
         // 设置字体大小(最小的字体大小)
@@ -564,7 +582,7 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
 //        WKUserScript *wkUScript = [[WKUserScript alloc] initWithSource:metaJScript injectionTime:WKUserScriptInjectionTimeAtDocumentEnd forMainFrameOnly:YES];
 //        [UserContentController addUserScript:wkUScript];
         // 是否支持记忆读取
-        Configuration.suppressesIncrementalRendering = YES;
+//        Configuration.suppressesIncrementalRendering = YES;
         // 允许用户更改网页的设置
         Configuration.userContentController = UserContentController;
         
@@ -574,8 +592,14 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
         // 设置代理
         _wkWebView.navigationDelegate = self;
         _wkWebView.UIDelegate = self;
+        _wkWebView.scrollView.delegate = self;
+        
+        NSKeyValueObservingOptions observingOptions = NSKeyValueObservingOptionNew;
+        // KVO 监听属性，除了下面列举的两个，还有其他的一些属性，具体参考 WKWebView 的头文件
         //kvo 添加进度监控
-        [_wkWebView addObserver:self forKeyPath:NSStringFromSelector(@selector(estimatedProgress)) options:0 context:WkwebBrowserContext];
+        [_wkWebView addObserver:self forKeyPath:NSStringFromSelector(@selector(estimatedProgress)) options:observingOptions context:WkwebBrowserContext];
+        [_wkWebView addObserver:self forKeyPath:@"title" options:observingOptions context:nil];
+        
         //开启手势触摸
         _wkWebView.allowsBackForwardNavigationGestures = YES;
         
