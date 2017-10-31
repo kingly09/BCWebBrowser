@@ -499,6 +499,7 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
         WKWebViewConfiguration * Configuration = [[WKWebViewConfiguration alloc]init];
         //允许视频播放
         Configuration.allowsAirPlayForMediaPlayback = YES;
+#warning 在6 plus  10.3 在线播放的时候 画面不动
         // 允许在线播放
         Configuration.allowsInlineMediaPlayback = YES;
         // 允许可以与网页交互，选择视图
