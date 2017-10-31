@@ -20,6 +20,7 @@
 		3AE0BCE51E1D58300013055C /* WKJSPOST.html in Resources */ = {isa = PBXBuildFile; fileRef = 3AE0BCE01E1D58300013055C /* WKJSPOST.html */; };
 		3AE0BCE61E1D58300013055C /* WKWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AE0BCE21E1D58300013055C /* WKWebViewController.m */; };
 		BC3680EC1FA855AA007D2358 /* test.html in Resources */ = {isa = PBXBuildFile; fileRef = BC3680EB1FA855AA007D2358 /* test.html */; };
+		BC3680EF1FA8668B007D2358 /* BCObjectiveCJSHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BC3680EE1FA8668B007D2358 /* BCObjectiveCJSHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +63,8 @@
 		3AE0BCE11E1D58300013055C /* WKWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKWebViewController.h; sourceTree = "<group>"; };
 		3AE0BCE21E1D58300013055C /* WKWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKWebViewController.m; sourceTree = "<group>"; };
 		BC3680EB1FA855AA007D2358 /* test.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = test.html; sourceTree = "<group>"; };
+		BC3680ED1FA8668B007D2358 /* BCObjectiveCJSHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BCObjectiveCJSHelper.h; sourceTree = "<group>"; };
+		BC3680EE1FA8668B007D2358 /* BCObjectiveCJSHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BCObjectiveCJSHelper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +164,8 @@
 				3AE0BCE01E1D58300013055C /* WKJSPOST.html */,
 				3AE0BCE11E1D58300013055C /* WKWebViewController.h */,
 				3AE0BCE21E1D58300013055C /* WKWebViewController.m */,
+				BC3680ED1FA8668B007D2358 /* BCObjectiveCJSHelper.h */,
+				BC3680EE1FA8668B007D2358 /* BCObjectiveCJSHelper.m */,
 			);
 			path = WkwebView;
 			sourceTree = "<group>";
@@ -227,8 +232,9 @@
 		3AE0BC651E1D570F0013055C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = BC;
 				LastUpgradeCheck = 0820;
-				ORGANIZATIONNAME = XiaoFeng;
+				ORGANIZATIONNAME = "Bamboocloud Co., Ltd.";
 				TargetAttributes = {
 					3AE0BC6C1E1D570F0013055C = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -305,6 +311,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BC3680EF1FA8668B007D2358 /* BCObjectiveCJSHelper.m in Sources */,
 				3AE0BC781E1D570F0013055C /* ViewController.m in Sources */,
 				3AE0BCE61E1D58300013055C /* WKWebViewController.m in Sources */,
 				3AE0BC751E1D570F0013055C /* AppDelegate.m in Sources */,

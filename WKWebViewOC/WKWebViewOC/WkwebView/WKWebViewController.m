@@ -5,6 +5,7 @@
 #import "WKWebViewController.h"
 #import <WebKit/WKWebView.h>
 #import <WebKit/WebKit.h>
+#import "BCObjectiveCJSHelper.h"
 
 typedef enum{
     loadWebURLString = 0,
@@ -18,7 +19,6 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
 @interface WKWebViewController ()
 <WKNavigationDelegate,
 WKUIDelegate,
-WKScriptMessageHandler,
 UINavigationControllerDelegate,
 UINavigationBarDelegate,
 UIScrollViewDelegate>
@@ -46,7 +46,8 @@ UIScrollViewDelegate>
 @property (nonatomic)UIBarButtonItem* customBackBarItem;
 //关闭按钮
 @property (nonatomic)UIBarButtonItem* closeButtonItem;
-
+// oc 与 js的交互对象
+@property (nonatomic, strong) BCObjectiveCJSHelper *ocjsHelper;
 @end
 
 @implementation WKWebViewController
@@ -58,6 +59,9 @@ UIScrollViewDelegate>
     
     //加载web页面
     [self webViewloadURLType];
+ 
+    //设置 oc 与 js的交互对象
+    self.ocjsHelper.webView = self.wkWebView;
     
     //添加到主控制器上
     [self.view addSubview:self.wkWebView];
@@ -85,8 +89,7 @@ UIScrollViewDelegate>
         self.navigationController.navigationBarHidden = NO;
     }
 }
--(void)viewWillDisappear:(BOOL)animated{
-    [self.wkWebView.configuration.userContentController removeScriptMessageHandlerForName:@"WXPay"];
+-(void)viewWillDisappear:(BOOL)animated {
     [self.wkWebView setNavigationDelegate:nil];
     [self.wkWebView setUIDelegate:nil];
 }
@@ -95,7 +98,8 @@ UIScrollViewDelegate>
 -(void)dealloc {
     [self.wkWebView removeObserver:self forKeyPath:NSStringFromSelector(@selector(estimatedProgress))];
     [self.wkWebView removeObserver:self forKeyPath:@"title"];
-    [self.wkWebView.configuration.userContentController removeScriptMessageHandlerForName:@"WXPay"];
+    [self.wkWebView.configuration.userContentController removeScriptMessageHandlerForName:KWebGetDeviceID];
+    NSLog(@"WKWebViewController dealloc ");
 }
 
 
@@ -504,20 +508,6 @@ UIScrollViewDelegate>
 
 }
 
-#pragma mark - WKScriptMessageHandler 拦截执行网页中的JS方法
-
-//拦截执行网页中的JS方法
-- (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message{
-
-    //服务器固定格式写法 window.webkit.messageHandlers.名字.postMessage(内容);
-    //客户端写法 message.name isEqualToString:@"名字"]
-    if ([message.name isEqualToString:@"WXPay"]) {
-        NSLog(@"%@", message.body);
-        //调用微信支付方法
-//        [self WXPayWithParam:message.body];
-    }
-}
-
 #pragma mark - 初始化URL/对外扩展方法
 
 - (void)loadWebURLSring:(NSString *)string{
@@ -583,8 +573,8 @@ UIScrollViewDelegate>
         //自定义配置,一般用于 js调用oc方法(OC拦截URL中的数据做自定义操作)
         WKUserContentController * UserContentController = [[WKUserContentController alloc]init];
         // 添加消息处理，注意：self指代的对象需要遵守WKScriptMessageHandler协议，结束时需要移除
-        [UserContentController addScriptMessageHandler:self name:@"WXPay"];
-        
+        [UserContentController addScriptMessageHandler:(id)self.ocjsHelper name:KWebGetDeviceID];
+
         //客户端添加meta标签
 //        NSString *metaJScript = @"var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no'); document.getElementsByTagName('head')[0].appendChild(meta);";
 //        WKUserScript *wkUScript = [[WKUserScript alloc] initWithSource:metaJScript injectionTime:WKUserScriptInjectionTimeAtDocumentEnd forMainFrameOnly:YES];
@@ -665,6 +655,13 @@ UIScrollViewDelegate>
         _snapShotsArray = [NSMutableArray array];
     }
     return _snapShotsArray;
+}
+
+- (BCObjectiveCJSHelper *)ocjsHelper {
+    if (!_ocjsHelper) {
+        _ocjsHelper = [[BCObjectiveCJSHelper alloc] initWithDelegate:(id)self vc:self];
+    }
+    return _ocjsHelper;
 }
 
 @end

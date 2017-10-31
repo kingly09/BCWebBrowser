@@ -35,6 +35,7 @@
   <li onclick="popConfirmPanel()">弹确认框</li>
   <li onclick="popTextInputPanel()">弹输入框</li>
   <li onclick="getDeviceId()">获取设备ID</li>
+  <li onclick="openCamera()">打开app的摄像头</li>
   
 </ul>
 <div id="temp"></div>
@@ -58,6 +59,11 @@
   // 获取设备ID
   function getDeviceId() {
       window.webkit.messageHandlers.timefor.postMessage({code: '0001', functionName: 'getdevideId'});
+  }
+
+  //打开摄像头
+  function openCamera(){
+     window.webkit.messageHandlers.timefor.postMessage({code: '0002', functionName: 'openCamera'});
   }
 
 </script>
