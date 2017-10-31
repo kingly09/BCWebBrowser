@@ -29,6 +29,18 @@
            alert("测试一下")
            //  document.getElementById("uin").value = "libin";
         }
+        
+        //在这个属性是ios 10中设置可以让视频在小窗内播放
+        function addWebkitplaysinline()
+        {
+            var eles = document.getElementsByTagName("video");
+            if(eles.length > 0){
+                for (var i = 0; i < eles.length; i++) {
+                    document.getElementsByTagName("video")[i].setAttribute("webkit-playsinline","true");
+                }
+            }
+        }
+        
         </script>
     </head>
     <body>

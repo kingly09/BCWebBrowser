@@ -184,6 +184,15 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
     [self.wkWebView evaluateJavaScript:jscript completionHandler:^(id object, NSError * _Nullable error) {
     }];
 }
+// 给所有的video添加 webkit-playsinline（在这个属性是ios 10中设置可以让视频在小窗内播放）
+-(void)addWebkitplaysinlineJsCode {
+    // 拼装成调用JavaScript的字符串
+    NSString *jscript = [NSString stringWithFormat:@"var eles = document.getElementsByTagName('video');if(eles.length > 0){for (var i = 0; i < eles.length; i++) {document.getElementsByTagName('video')[i].setAttribute('webkit-playsinline','true'); }}"];
+    // 调用JS代码
+    [self.wkWebView evaluateJavaScript:jscript completionHandler:^(id object, NSError * _Nullable error) {
+        
+    }];
+}
 
 // 调用JS发送提示框请求
 - (void)alertRequestWithJS {
@@ -274,6 +283,8 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
         [self postRequestWithJS];
         // 提示一个框
         //[self alertRequestWithJS];
+        //给所有的video添加 webkit-playsinline支持小窗口播放
+        [self addWebkitplaysinlineJsCode];
         // 将Flag置为NO（后面就不需要加载了）
         self.needLoadJSPOST = NO;
     }
@@ -497,11 +508,17 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
     if (!_wkWebView) {
         //设置网页的配置文件
         WKWebViewConfiguration * Configuration = [[WKWebViewConfiguration alloc]init];
-        //允许视频播放
+        //这个值决定了从这个页面是否可以Air Play
         Configuration.allowsAirPlayForMediaPlayback = YES;
-#warning 在6 plus  10.3 在线播放的时候 画面不动
-        // 允许在线播放
-        Configuration.allowsInlineMediaPlayback = YES;
+        // 允许在线播放 ,默认使NO。这个值决定了用内嵌HTML5播放视频还是用本地的全屏控制。为了内嵌视频播放，不仅仅需要在这个页面上设置这个属性，还必须的是在HTML中的video元素必须包含webkit-playsinline属性。
+       if (@available(iOS 11.0, *)) {
+            Configuration.allowsInlineMediaPlayback = YES;
+       }else{
+            Configuration.allowsInlineMediaPlayback = NO;
+       }
+       
+        // 在iPhone和iPad上默认使YES。这个值决定了HTML5视频可以自动播放还是需要用户去启动播放
+        Configuration.requiresUserActionForMediaPlayback = NO;
         // 允许可以与网页交互，选择视图
         Configuration.selectionGranularity = YES;
         // web内容处理池
