@@ -216,7 +216,7 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
      @{@"request":request,@"snapShotView":currentSnapShotView}];
 }
 
-
+#pragma mark - 委托方法
 #pragma mark - WKNavigationDelegate
 
 //这个是网页加载完成，导航的变化
@@ -422,6 +422,32 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
     }
 }
 
+#pragma mark - 初始化URL/对外扩展方法
+
+- (void)loadWebURLSring:(NSString *)string{
+    self.URLString = string;
+    self.loadType = loadWebURLString;
+}
+
+- (void)loadWebHTMLSring:(NSString *)string{
+    self.URLString = string;
+    self.loadType = loadWebHTMLString;
+}
+
+- (void)POSTWebURLSring:(NSString *)string postData:(NSString *)postData{
+    self.URLString = string;
+    self.postData = postData;
+    self.loadType = POSTWebURLString;
+}
+
+-(void)automaticLoginWebURLSring:(NSString *)string injectJSCode:(NSString *)JSCode {
+    
+    self.URLString    = string;
+    self.injectJSCode = JSCode;
+    self.loadType     = automaticLoginWebURLSring;
+    
+}
+#pragma mark - setter and getter 方法
 #pragma mark - 懒加载
 
 - (WKWebView *)wkWebView{
@@ -507,32 +533,6 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
         _snapShotsArray = [NSMutableArray array];
     }
     return _snapShotsArray;
-}
-
-#pragma mark - 初始化URL/对外扩展方法
-
-- (void)loadWebURLSring:(NSString *)string{
-    self.URLString = string;
-    self.loadType = loadWebURLString;
-}
-
-- (void)loadWebHTMLSring:(NSString *)string{
-    self.URLString = string;
-    self.loadType = loadWebHTMLString;
-}
-
-- (void)POSTWebURLSring:(NSString *)string postData:(NSString *)postData{
-    self.URLString = string;
-    self.postData = postData;
-    self.loadType = POSTWebURLString;
-}
-
--(void)automaticLoginWebURLSring:(NSString *)string injectJSCode:(NSString *)JSCode {
-    
-    self.URLString    = string;
-    self.injectJSCode = JSCode;
-    self.loadType     = automaticLoginWebURLSring;
-    
 }
 
 @end
