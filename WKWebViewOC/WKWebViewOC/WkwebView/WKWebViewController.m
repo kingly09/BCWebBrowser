@@ -378,7 +378,30 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
         }
     }
     [self updateNavigationItems];
+    //允许跳转
     decisionHandler(WKNavigationActionPolicyAllow);
+    //不允许跳转
+    //decisionHandler(WKNavigationActionPolicyCancel);
+}
+
+// 在收到响应后，决定是否跳转
+- (void)webView:(WKWebView *)webView decidePolicyForNavigationResponse:(WKNavigationResponse *)navigationResponse decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandler {
+    NSLog(@"decidePolicyForNavigationResponse   ====    %@", navigationResponse);
+    decisionHandler(WKNavigationResponsePolicyAllow);
+}
+
+// 加载 HTTPS 的链接，需要权限认证时调用  \  如果 HTTPS 是用的证书在信任列表中这不要此代理方法
+- (void)webView:(WKWebView *)webView didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler {
+    if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]) {
+        if ([challenge previousFailureCount] == 0) {
+            NSURLCredential *credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+            completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
+        } else {
+            completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
+        }
+    } else {
+        completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
+    }
 }
 
 // 内容加载失败时候调用
@@ -425,18 +448,18 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
 // runJavaScriptTextInput
 // 要求用户输入一段文本
 // 在原生输入得到文本内容后，通过completionHandler回调给JS 大家注意这个回调的completionHandler参数是字符串
--(void)webView:(WKWebView *)webView runJavaScriptTextInputPanelWithPrompt:(NSString *)prompt defaultText:(NSString *)defaultText initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(NSString * _Nullable))completionHandler{
+-(void)webView:(WKWebView *)webView runJavaScriptTextInputPanelWithPrompt:(NSString *)prompt defaultText:(NSString *)defaultText initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(NSString * _Nullable))completionHandler {
     
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"textinput" message:@"JS调用输入框" preferredStyle:UIAlertControllerStyleAlert];
-    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        textField.textColor = [UIColor redColor];
-    }];
-    [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        completionHandler([[alert.textFields lastObject] text]);
-    }]];
-    
-    [self presentViewController:alert animated:YES completion:NULL];
-    
+//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"textinput" message:@"JS调用输入框" preferredStyle:UIAlertControllerStyleAlert];
+//    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+//        textField.textColor = [UIColor redColor];
+//    }];
+//    [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//        completionHandler([[alert.textFields lastObject] text]);
+//    }]];
+//
+//    [self presentViewController:alert animated:YES completion:NULL];
+    completionHandler(@"http");
 }
 
 //KVO监听进度条
@@ -506,6 +529,7 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
 
 - (WKWebView *)wkWebView{
     if (!_wkWebView) {
+        
         //设置网页的配置文件
         WKWebViewConfiguration * Configuration = [[WKWebViewConfiguration alloc]init];
         //这个值决定了从这个页面是否可以Air Play
@@ -516,21 +540,35 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
        }else{
             Configuration.allowsInlineMediaPlayback = NO;
        }
-       
+        // 创建设置对象
+        WKPreferences *preference = [[WKPreferences alloc]init];
+        // 设置字体大小(最小的字体大小)
+        preference.minimumFontSize = 0;
+        // 设置偏好设置对象
+        Configuration.preferences = preference;
+        
         // 在iPhone和iPad上默认使YES。这个值决定了HTML5视频可以自动播放还是需要用户去启动播放
         Configuration.requiresUserActionForMediaPlayback = NO;
         // 允许可以与网页交互，选择视图
         Configuration.selectionGranularity = YES;
         // web内容处理池
         Configuration.processPool = [[WKProcessPool alloc] init];
+        
         //自定义配置,一般用于 js调用oc方法(OC拦截URL中的数据做自定义操作)
         WKUserContentController * UserContentController = [[WKUserContentController alloc]init];
         // 添加消息处理，注意：self指代的对象需要遵守WKScriptMessageHandler协议，结束时需要移除
         [UserContentController addScriptMessageHandler:self name:@"WXPay"];
+        
+        //客户端添加meta标签
+//        NSString *metaJScript = @"var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no'); document.getElementsByTagName('head')[0].appendChild(meta);";
+//        WKUserScript *wkUScript = [[WKUserScript alloc] initWithSource:metaJScript injectionTime:WKUserScriptInjectionTimeAtDocumentEnd forMainFrameOnly:YES];
+//        [UserContentController addUserScript:wkUScript];
         // 是否支持记忆读取
         Configuration.suppressesIncrementalRendering = YES;
         // 允许用户更改网页的设置
         Configuration.userContentController = UserContentController;
+        
+        
         _wkWebView = [[WKWebView alloc] initWithFrame:self.view.bounds configuration:Configuration];
         _wkWebView.backgroundColor = [UIColor colorWithRed:240.0/255 green:240.0/255 blue:240.0/255 alpha:1.0];
         // 设置代理
@@ -540,6 +578,7 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
         [_wkWebView addObserver:self forKeyPath:NSStringFromSelector(@selector(estimatedProgress)) options:0 context:WkwebBrowserContext];
         //开启手势触摸
         _wkWebView.allowsBackForwardNavigationGestures = YES;
+        
         // 设置 可以前进 和 后退
         //适应你设定的尺寸
         [_wkWebView sizeToFit];
