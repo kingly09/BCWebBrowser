@@ -41,7 +41,8 @@
 - (IBAction)OnClickQiyeEmail:(id)sender {
     
     WKWebViewController *web = [[WKWebViewController alloc] init];
-    [web loadWebURLSring:@"https://m.exmail.qq.com/cgi-bin/loginpage"];
+     NSString *inputValueJS = @"var psel = document.getElementById('uin');psel.value = '测试自动输入账号121';var pswd = document.getElementById('pwd');pswd.value = '123';";
+    [web ];
     [self.navigationController pushViewController:web animated:YES];
 }
 

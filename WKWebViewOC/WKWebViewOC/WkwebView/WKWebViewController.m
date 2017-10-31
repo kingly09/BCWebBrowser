@@ -30,6 +30,7 @@ typedef enum{
     loadWebURLString = 0,
     loadWebHTMLString,
     POSTWebURLString,
+    automaticLoginWebURLSring,
 }wkWebLoadType;
 
 static void *WkwebBrowserContext = &WkwebBrowserContext;
@@ -41,12 +42,16 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
 @property (nonatomic,strong) UIProgressView *progressView;
 //仅当第一次的时候加载本地JS
 @property(nonatomic,assign) BOOL needLoadJSPOST;
+//是否需要注入js代码
+@property(nonatomic,assign) BOOL needInjectJS;
 //网页加载的类型
 @property(nonatomic,assign) wkWebLoadType loadType;
 //保存的网址链接
 @property (nonatomic, copy) NSString *URLString;
 //保存POST请求体
 @property (nonatomic, copy) NSString *postData;
+//注入js代码
+@property (nonatomic, copy) NSString *injectJSCode;
 //保存请求链接
 @property (nonatomic)NSMutableArray* snapShotsArray;
 //返回按钮
@@ -57,6 +62,8 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
 @end
 
 @implementation WKWebViewController
+
+#pragma mark - 生命周期
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -90,6 +97,16 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
         self.navigationController.navigationBarHidden = NO;
     }
 }
+-(void)viewWillDisappear:(BOOL)animated{
+    [self.wkWebView.configuration.userContentController removeScriptMessageHandlerForName:@"WXPay"];
+    [self.wkWebView setNavigationDelegate:nil];
+    [self.wkWebView setUIDelegate:nil];
+}
+
+//注意，观察的移除
+-(void)dealloc{
+    [self.wkWebView removeObserver:self forKeyPath:NSStringFromSelector(@selector(estimatedProgress))];
+}
 
 
 - (void)roadLoadClicked{
@@ -101,11 +118,35 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
         [self.wkWebView goBack];
     }else{
        [self.navigationController popViewControllerAnimated:YES];
-//         [self.wkWebView goBack];
     }
 }
 -(void)closeItemClicked{
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - 初始化URL
+- (void)loadWebURLSring:(NSString *)string{
+    self.URLString = string;
+    self.loadType = loadWebURLString;
+}
+
+- (void)loadWebHTMLSring:(NSString *)string{
+    self.URLString = string;
+    self.loadType = loadWebHTMLString;
+}
+
+- (void)POSTWebURLSring:(NSString *)string postData:(NSString *)postData{
+    self.URLString = string;
+    self.postData = postData;
+    self.loadType = POSTWebURLString;
+}
+
+-(void)automaticLoginWebURLSring:(NSString *)string injectJSCode:(NSString *)JSCode {
+    
+    self.URLString    = string;
+    self.injectJSCode = JSCode;
+    self.loadType     = automaticLoginWebURLSring;
+    
 }
 
 #pragma mark ================ 加载方式 ================
@@ -114,20 +155,26 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
     switch (self.loadType) {
         case loadWebURLString:{
             //创建一个NSURLRequest 的对象
-            NSURLRequest * Request_zsj = [NSURLRequest requestWithURL:[NSURL URLWithString:self.URLString] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
+            NSURLRequest * Request_zsj = [NSURLRequest requestWithURL:[NSURL URLWithString:self.URLString] cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30];
             //加载网页
             [self.wkWebView loadRequest:Request_zsj];
             break;
         }
         case loadWebHTMLString:{
+            //加载本地的HTML
             [self loadHostPathURL:self.URLString];
             break;
         }
         case POSTWebURLString:{
-            // JS发送POST的Flag，为真的时候会调用JS的POST方法
+            //JS发送POST的Flag，为真的时候会调用JS的POST方法
             self.needLoadJSPOST = YES;
             //POST使用预先加载本地JS方法的html实现，请确认WKJSPOST存在
             [self loadHostPathURL:@"WKJSPOST"];
+            break;
+        }
+        case automaticLoginWebURLSring:{
+            //为真的时候会调用JS的注入js代码
+            self.needInjectJS = YES;
             break;
         }
     }
@@ -154,23 +201,18 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
 // 调用JS发送POST请求
 - (void)alertRequestWithJS {
     // 拼装成调用JavaScript的字符串
-//    NSString *jscript = [NSString stringWithFormat:@"testAlert();"];
-//    // 调用JS代码
-//
-//        [self.wkWebView evaluateJavaScript:jscript completionHandler:^(id object, NSError * _Nullable error) {
-//
-//
-//        }];
-
-    
-    
-    
+    NSString *jscript = [NSString stringWithFormat:@"testAlert();"];
+    // 调用JS代码
+    [self.wkWebView evaluateJavaScript:jscript completionHandler:^(id object, NSError * _Nullable error) {
+        
+    }];
+}
+// 调用JS发送注入js代码请求
+-(void)requestInjectJSCode {
     //设置JS
-//    NSString * inputValueJS = [NSString stringWithFormat:@"alert(document.getElementById('uin').attributes['placeholder'].value)"];
-//
     NSString *inputValueJS = @"var psel = document.getElementById('uin');psel.value = '测试自动输入账号121';var pswd = document.getElementById('pwd');pswd.value = '123';";
-    //执行JS
 //    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        //执行JS
         [self.wkWebView evaluateJavaScript:inputValueJS completionHandler:^(id _Nullable response, NSError * _Nullable error) {
             NSLog(@"value: %@ error: %@", response, error);
         }];
@@ -178,21 +220,6 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
 }
 
 
-- (void)loadWebURLSring:(NSString *)string{
-    self.URLString = string;
-    self.loadType = loadWebURLString;
-}
-
-- (void)loadWebHTMLSring:(NSString *)string{
-    self.URLString = string;
-    self.loadType = loadWebHTMLString;
-}
-
-- (void)POSTWebURLSring:(NSString *)string postData:(NSString *)postData{
-    self.URLString = string;
-    self.postData = postData;
-    self.loadType = POSTWebURLString;
-}
 
 //#pragma mark   ============== URL pay 开始支付 ==============
 //
@@ -280,7 +307,6 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
     }
     // 获取加载网页的标题
     self.title = self.wkWebView.title;
-     [self alertRequestWithJS];
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     [self updateNavigationItems];
 }
@@ -382,7 +408,7 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
     
 }
 
-#pragma mark ================ WKUIDelegate ================
+#pragma mark - WKUIDelegate 
 
 // 获取js 里面的提示
 -(void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(void))completionHandler{
@@ -447,7 +473,7 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
     }
 }
 
-#pragma mark ================ WKScriptMessageHandler ================
+#pragma mark - WKScriptMessageHandler 拦截执行网页中的JS方法
 
 //拦截执行网页中的JS方法
 - (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message{
@@ -461,7 +487,7 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
     }
 }
 
-#pragma mark ================ 懒加载 ================
+#pragma mark - 懒加载
 
 - (WKWebView *)wkWebView{
     if (!_wkWebView) {
@@ -499,7 +525,7 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
     return _wkWebView;
 }
 
--(UIBarButtonItem*)customBackBarItem{
+-(UIBarButtonItem *)customBackBarItem{
     if (!_customBackBarItem) {
         UIImage* backItemImage = [[UIImage imageNamed:@"backItemImage"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         UIImage* backItemHlImage = [[UIImage imageNamed:@"backItemImage-hl"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -548,15 +574,5 @@ static void *WkwebBrowserContext = &WkwebBrowserContext;
     return _snapShotsArray;
 }
 
--(void)viewWillDisappear:(BOOL)animated{
-    [self.wkWebView.configuration.userContentController removeScriptMessageHandlerForName:@"WXPay"];
-    [self.wkWebView setNavigationDelegate:nil];
-    [self.wkWebView setUIDelegate:nil];
-}
-
-//注意，观察的移除
--(void)dealloc{
-    [self.wkWebView removeObserver:self forKeyPath:NSStringFromSelector(@selector(estimatedProgress))];
-}
 
 @end
