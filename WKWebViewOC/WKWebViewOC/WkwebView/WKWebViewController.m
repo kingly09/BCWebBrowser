@@ -33,6 +33,8 @@ UIScrollViewDelegate>
 @property(nonatomic,assign) BOOL needInjectJS;
 //设置字体大小
 @property(nonatomic,assign) float minimumFontSize;
+//设置缓存时间（过期时间默认为一周）
+@property(nonatomic,assign) NSTimeInterval timeoutInterval;
 //网页加载的类型
 @property(nonatomic,assign) wkWebLoadType loadType;
 //保存的网址链接
@@ -170,6 +172,8 @@ UIScrollViewDelegate>
 
 
 - (void)webViewloadURLType{
+    
+
     switch (self.loadType) {
         case loadWebURLString:{
             [self loadWebWithURLString:self.URLString];
@@ -197,8 +201,8 @@ UIScrollViewDelegate>
 }
 // 加载一个WEB的URL地址网页
 -(void) loadWebWithURLString:(NSString *)url {
-    //创建一个NSURLRequest 的对象,加入缓存机制，缓存时间为30s
-    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:self.URLString] cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:300000];
+    //创建一个NSURLRequest 的对象,加入缓存机制，缓存时间为默认为一周
+    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:self.URLString] cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:self.timeoutInterval];
     //加载网页
     [self.wkWebView loadRequest:urlRequest];
 }
@@ -574,6 +578,10 @@ UIScrollViewDelegate>
     self.minimumFontSize = fontSize;
 }
 
+-(void)setupTimeoutInterval:(NSTimeInterval )cacheTime {
+    self.timeoutInterval = cacheTime;
+}
+
 #pragma mark - setter and getter 方法
 #pragma mark - 懒加载
 
@@ -663,6 +671,7 @@ UIScrollViewDelegate>
     return _customBackBarItem;
 }
 
+
 - (UIProgressView *)progressView{
     if (!_progressView) {
         _progressView = [[UIProgressView alloc]initWithProgressViewStyle:UIProgressViewStyleDefault];
@@ -697,6 +706,13 @@ UIScrollViewDelegate>
         _ocjsHelper = [[BCObjectiveCJSHelper alloc] initWithDelegate:(id)self vc:self];
     }
     return _ocjsHelper;
+}
+
+-(NSTimeInterval )timeoutInterval {
+    if (!_timeoutInterval) {
+        _timeoutInterval = 1000 * 60 * 60 * 24 * 7;  //默认缓存时间为1周的时间
+    }
+    return _timeoutInterval;
 }
 
 @end

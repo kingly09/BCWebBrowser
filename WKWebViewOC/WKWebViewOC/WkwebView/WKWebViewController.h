@@ -46,5 +46,9 @@
  @param fontSize 字体大小
  */
 -(void)setupMinimumFontSize:(float)fontSize;
+/**
+ 设置缓存的时间，默认为缓存一周
+ **/
+-(void)setupTimeoutInterval:(NSTimeInterval )cacheTime;
 
 @end
