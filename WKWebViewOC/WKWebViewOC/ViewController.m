@@ -92,7 +92,13 @@ form.submit();\
 - (IBAction)OnClickRandomNumber:(id)sender {
     
     WKWebViewController *web = [[WKWebViewController alloc] init];
-    NSString *inputValueJS = @"var psel = document.getElementById('uin');psel.value = '测试自动输入账号121';var pswd = document.getElementById('pwd');pswd.value = '123';";
+    
+    NSString *metaJScript = @"var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no'); document.getElementsByTagName('head')[0].appendChild(meta);document.getElementsByTagName('body')[0].setAttribute('style','margin:0 auto;text-align:center;font-size:x-large;');";
+    
+    NSString *randomNumJS = @"function randomNum(Min,Max){var Range = Max - Min;var Rand =  Math.random();return(Min + Math.round(Rand * Range));} var num = randomNum(1000000,100000000);  document.getElementsByTagName('span')[0].innerHTML = num;function randomNumInnerHTML() { var num = randomNum(1000000,100000000);  document.getElementsByTagName('span')[0].innerHTML = num; } setInterval('randomNumInnerHTML();', 3000); ";
+    
+    NSString *inputValueJS = [NSString stringWithFormat:@"%@%@",metaJScript,randomNumJS];
+    
     [web automaticLoginWebURLSring:@"http://10.100.0.141:8091/wanhuaka/h5.html" injectJSCode:inputValueJS];
     [web setupMinimumFontSize:self.minimumFontSize];
     [self.navigationController pushViewController:web animated:YES];

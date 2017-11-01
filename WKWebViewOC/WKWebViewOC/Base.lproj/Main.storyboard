@@ -72,7 +72,7 @@
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0f2-Rv-8dB">
                                 <rect key="frame" x="24" y="148" width="78" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="30S 随机数"/>
+                                <state key="normal" title="随机数"/>
                                 <connections>
                                     <action selector="OnClickRandomNumber:" destination="BYZ-38-t0r" eventType="touchUpInside" id="h8G-FU-SNH"/>
                                 </connections>
