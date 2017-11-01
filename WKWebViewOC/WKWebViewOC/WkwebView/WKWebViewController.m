@@ -256,6 +256,13 @@ UIScrollViewDelegate>
 #pragma mark - 点击事件
 
 - (void)roadLoadClicked{
+    
+    if (self.injectJSCode.length > 0) {
+        self.needInjectJS = YES;
+        //注入js
+        [self requestInjectJSCode];
+    }
+    
     [self.wkWebView reload];
 }
 
@@ -423,6 +430,7 @@ UIScrollViewDelegate>
             break;
         }
         case WKNavigationTypeReload: {
+            
             break;
         }
         case WKNavigationTypeFormResubmitted: {

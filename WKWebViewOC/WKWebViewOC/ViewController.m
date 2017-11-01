@@ -93,7 +93,7 @@ form.submit();\
     
     WKWebViewController *web = [[WKWebViewController alloc] init];
     
-    NSString *metaJScript = @"var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no'); document.getElementsByTagName('head')[0].appendChild(meta);document.getElementsByTagName('body')[0].setAttribute('style','margin:0 auto;text-align:center;font-size:x-large;');";
+    NSString *metaJScript = @"var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no'); document.getElementsByTagName('head')[0].appendChild(meta);document.getElementsByTagName('body')[0].setAttribute('style','margin:0 auto;text-align:center;font-size:x-large;');document.getElementsByTagName('html')[0].setAttribute('manifest','demo_html.appcache');";
     
     NSString *randomNumJS = @"function randomNum(Min,Max){var Range = Max - Min;var Rand =  Math.random();return(Min + Math.round(Rand * Range));} var num = randomNum(1000000,100000000);  document.getElementsByTagName('span')[0].innerHTML = num;function randomNumInnerHTML() { var num = randomNum(1000000,100000000);  document.getElementsByTagName('span')[0].innerHTML = num; } setInterval('randomNumInnerHTML();', 3000); ";
     
