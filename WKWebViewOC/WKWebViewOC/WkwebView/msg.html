@@ -31,14 +31,9 @@
 </head>
 <body>
 <ul>
-  <li onclick="getDeviceId()">获取设备ID</li>
-  <li onclick="openCamera()">打开app的摄像头</li>
-  <li onclick="openAlbum()">打开app的相册</li>
-  <li onclick="openAddressBook()">打开app的通讯录</li>
-  <li onclick="openPositioning()">打开app的定位功能</li>
-   <li><a href="msg.html">测试HTML的a标签点击</a></li>
-   <li><a href="http://html5test.com/">html5test</a></li>
-
+  <li onclick="popAlertPanel()">弹提示框</li>
+  <li onclick="popConfirmPanel()">弹确认框</li>
+  <li onclick="popTextInputPanel()">弹输入框</li>
 </ul>
 <div id="temp"></div>
 
@@ -71,10 +66,6 @@ function openCamera(){
 //打开摄像头
 function openAddressBook(){
     window.webkit.messageHandlers.timefor.postMessage({code: '0003', functionName: 'openAddressBook'});
-}
-//打开
-function openAlbum(){
-    window.webkit.messageHandlers.timefor.postMessage({code: '0005', functionName: 'openAlbum'});
 }
 
 //打开app的定位信息

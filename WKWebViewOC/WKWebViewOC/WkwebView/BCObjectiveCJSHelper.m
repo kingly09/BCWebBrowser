@@ -8,12 +8,28 @@
 
 #import "BCObjectiveCJSHelper.h"
 #import <AddressBookUI/AddressBookUI.h>
+ #import <CoreLocation/CoreLocation.h>
 
-@interface BCObjectiveCJSHelper()<UINavigationControllerDelegate,UIImagePickerControllerDelegate,ABPeoplePickerNavigationControllerDelegate>
+@interface BCObjectiveCJSHelper()
+<UINavigationControllerDelegate,
+UIImagePickerControllerDelegate,
+ABPeoplePickerNavigationControllerDelegate,
+CLLocationManagerDelegate>
+
 @property (nonatomic, weak) UIViewController *vc;
 @end
 
-@implementation BCObjectiveCJSHelper
+@implementation BCObjectiveCJSHelper {
+    
+    // 地理位置
+    CLLocationManager *myLocationManager;
+    CLLocation *myLocation;             //当前位置
+    NSString *sLocation;                //当前定位城市
+    double longitude;                   //经度，refProgramId有效时可空
+    double latitude;                    //纬度，refProgramId有效时可空
+    NSString *locationString;           //位置信息
+    
+}
 
 - (instancetype)initWithDelegate:(id<BCObjectiveCJSHelperDelegate>)delegate vc:(UIViewController *)vc; {
     if (self = [super init]) {
@@ -51,6 +67,10 @@
             }else if ([code isEqualToString:@"0003"]) {
                 NSLog(@"打开通讯录");
                 [self openAddressBook];
+                return;
+            }else if ([code isEqualToString:@"0004"]) {
+                NSLog(@"打开app的定位信息");
+                [self openPositioning];
                 return;
             }else {
                 return;
@@ -90,12 +110,12 @@
     NSString *js = [NSString stringWithFormat:@"globalCallback(\'%@\')", deviceId];
     [self.webView evaluateJavaScript:js completionHandler:nil];
     
-   [picker  dismissViewControllerAnimated:YES completion:nil];
+   [self.vc  dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
   
-    [picker dismissViewControllerAnimated:YES completion:^{
+    [self.vc dismissViewControllerAnimated:YES completion:^{
         
     }];
 }
@@ -155,6 +175,170 @@
     NSString *js = [NSString stringWithFormat:@"globalCallback(\'%@\')", deviceId];
     [self.webView evaluateJavaScript:js completionHandler:nil];
    
+}
+
+#pragma mark - 打开app的定位信息
+-(void)openPositioning {
+    if ([CLLocationManager locationServicesEnabled]) {
+        myLocationManager = [[CLLocationManager alloc]init];
+        [myLocationManager requestWhenInUseAuthorization];//设置请求位置权限
+        myLocationManager.delegate = self;
+        myLocationManager.desiredAccuracy = kCLLocationAccuracyBest;//定位方式为最优的状态
+        myLocationManager.distanceFilter = 1000.f;
+        [myLocationManager startUpdatingLocation];
+    }
+}
+
+#pragma mark - 定位CLLocationManagerDelegate
+/**
+ * 获取位置信息的协议
+ */
+-(void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
+{
+    switch (status) {
+        case kCLAuthorizationStatusNotDetermined:
+            if ([myLocationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+                [myLocationManager requestWhenInUseAuthorization];
+            }
+            break;
+            
+        default:
+            break;
+    }
+}
+- (void)locationManager:(CLLocationManager *)manager
+     didUpdateLocations:(NSArray *)locations
+{
+    myLocation = [locations lastObject];//更新位置
+    CLGeocoder *myGeocoder = [[CLGeocoder alloc]init];
+    [myGeocoder reverseGeocodeLocation:myLocation completionHandler:^(NSArray *placeMark,NSError *error){
+        
+        
+        //String to hold address
+        CLPlacemark *curPlaceMark = [placeMark firstObject];
+        //国家
+        NSString *country = curPlaceMark.country;
+        if ([country containsString:@"中国"])  {
+            country = @"";
+        }
+        
+        NSString *stateString;
+        NSArray *stateArr = [curPlaceMark.administrativeArea componentsSeparatedByString:@"省"];
+        if ([curPlaceMark.administrativeArea containsString:@"省"]) {
+            stateString = [stateArr firstObject];
+            if (stateString.length >0 ) {
+                stateString = [NSString stringWithFormat:@"%@省 ",stateString];
+            }
+            
+        }else{
+            stateString = curPlaceMark.administrativeArea;
+        }
+        NSString *cityString;
+        NSArray *cityArr = [curPlaceMark.locality componentsSeparatedByString:@"市"];
+        if ([curPlaceMark.locality containsString:@"市"]) {
+            cityString = [cityArr firstObject];
+            if (cityString.length >0 ) {
+                cityString = [NSString stringWithFormat:@"%@市 ",cityString];
+            }
+        }else{
+            cityString = curPlaceMark.locality;
+        }
+        
+        
+        NSString *quyuString = curPlaceMark.subLocality;
+        if (quyuString.length <=0) {
+            quyuString = @"";
+        }
+        if ([self isBlankString:stateString]) {
+            sLocation = @"";
+        }else{
+            sLocation = [NSString stringWithFormat:@"%@%@%@%@",country,stateString,cityString,quyuString];
+        }
+        if (sLocation.length>0) {
+            
+           sLocation =  [self calculateLengthWithString:sLocation];//计算、调整长度
+            
+        }else{
+            
+            sLocation = [self calculateLengthWithString:@"迷路中"];//计算、调整长度
+        }
+        
+        NSString *deviceId = [NSString stringWithFormat:@"当前地址为：%@",sLocation];
+        NSString *js = [NSString stringWithFormat:@"globalCallback(\'%@\')", deviceId];
+        [self.webView evaluateJavaScript:js completionHandler:nil];
+    }];
+}
+
+-(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+   sLocation =  [self calculateLengthWithString:@"迷路中"];//计算、调整长度
+    NSString *deviceId = [NSString stringWithFormat:@"当前地址为：%@",sLocation];
+    NSString *js = [NSString stringWithFormat:@"globalCallback(\'%@\')", deviceId];
+    [self.webView evaluateJavaScript:js completionHandler:nil];
+}
+
+/**
+ * @brief 判断字符串为空和只为空格解决办法
+ */
+- (BOOL)isBlankString:(NSString *)string
+{
+    if (string == nil) {
+        
+        return YES;
+        
+    }
+    
+    if (string == NULL) {
+        
+        return YES;
+        
+    }
+    
+    if ([string isKindOfClass:[NSNull class]]) {
+        
+        return YES;
+        
+    }
+    
+    if ([string isEqual:[NSNull null]]) {
+        
+        return YES;
+        
+    }
+    
+    if (string.length > 0) {
+        if ([[string lowercaseString] isEqualToString:@"<null>"]) {
+            return YES;
+        }
+        
+        if ([[string lowercaseString] isEqualToString:@"(null)"]) {
+            return YES;
+        }
+    }
+    //去除两端的空格
+    if ([[string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length]==0) {
+        
+        return YES;
+        
+    }
+    
+    return NO;
+}
+
+
+/**
+ 位置字段计算字符串长度、并且调整fram
+ */
+-(NSString *)calculateLengthWithString:(NSString *)address {
+    
+    NSString *locationString = @"迷路中";
+  
+    if (address.length==0) {
+        locationString = @"迷路中";
+    }else{
+        locationString = address;
+    }
+    return locationString;
 }
 
 //- (NSString *)UUID {

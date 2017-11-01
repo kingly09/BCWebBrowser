@@ -21,6 +21,7 @@
 		3AE0BCE61E1D58300013055C /* WKWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AE0BCE21E1D58300013055C /* WKWebViewController.m */; };
 		BC3680EC1FA855AA007D2358 /* test.html in Resources */ = {isa = PBXBuildFile; fileRef = BC3680EB1FA855AA007D2358 /* test.html */; };
 		BC3680EF1FA8668B007D2358 /* BCObjectiveCJSHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BC3680EE1FA8668B007D2358 /* BCObjectiveCJSHelper.m */; };
+		BC4AAFD81FA9568B0035502F /* msg.html in Resources */ = {isa = PBXBuildFile; fileRef = BC4AAFD71FA9568B0035502F /* msg.html */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +68,7 @@
 		BC3680EE1FA8668B007D2358 /* BCObjectiveCJSHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BCObjectiveCJSHelper.m; sourceTree = "<group>"; };
 		BC3680F11FA877A0007D2358 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		BC3680F21FA877A9007D2358 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
+		BC4AAFD71FA9568B0035502F /* msg.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = msg.html; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +163,7 @@
 		3AE0BCDD1E1D58300013055C /* WkwebView */ = {
 			isa = PBXGroup;
 			children = (
+				BC4AAFD71FA9568B0035502F /* msg.html */,
 				BC3680EB1FA855AA007D2358 /* test.html */,
 				3AE0BCDE1E1D58300013055C /* backItemImage@2x.png */,
 				3AE0BCDF1E1D58300013055C /* backItemImage_hl@2x.png */,
@@ -294,6 +297,7 @@
 			files = (
 				BC3680EC1FA855AA007D2358 /* test.html in Resources */,
 				3AE0BCE31E1D58300013055C /* backItemImage@2x.png in Resources */,
+				BC4AAFD81FA9568B0035502F /* msg.html in Resources */,
 				3AE0BCE41E1D58300013055C /* backItemImage_hl@2x.png in Resources */,
 				3AE0BC801E1D570F0013055C /* LaunchScreen.storyboard in Resources */,
 				3AE0BC7D1E1D570F0013055C /* Assets.xcassets in Resources */,
