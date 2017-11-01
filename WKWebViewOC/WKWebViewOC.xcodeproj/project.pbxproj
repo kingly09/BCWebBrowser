@@ -66,6 +66,7 @@
 		3AE0BCE01E1D58300013055C /* WKJSPOST.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = WKJSPOST.html; sourceTree = "<group>"; };
 		3AE0BCE11E1D58300013055C /* WKWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKWebViewController.h; sourceTree = "<group>"; };
 		3AE0BCE21E1D58300013055C /* WKWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKWebViewController.m; sourceTree = "<group>"; };
+		BC2FEA381FA9CEEE009BEAC2 /* menu.geojson */ = {isa = PBXFileReference; lastKnownFileType = text; path = menu.geojson; sourceTree = "<group>"; };
 		BC3680EB1FA855AA007D2358 /* test.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = test.html; sourceTree = "<group>"; };
 		BC3680ED1FA8668B007D2358 /* BCObjectiveCJSHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BCObjectiveCJSHelper.h; sourceTree = "<group>"; };
 		BC3680EE1FA8668B007D2358 /* BCObjectiveCJSHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BCObjectiveCJSHelper.m; sourceTree = "<group>"; };
@@ -182,6 +183,7 @@
 				3AE0BCE21E1D58300013055C /* WKWebViewController.m */,
 				BC3680ED1FA8668B007D2358 /* BCObjectiveCJSHelper.h */,
 				BC3680EE1FA8668B007D2358 /* BCObjectiveCJSHelper.m */,
+				BC2FEA381FA9CEEE009BEAC2 /* menu.geojson */,
 			);
 			path = WkwebView;
 			sourceTree = "<group>";
