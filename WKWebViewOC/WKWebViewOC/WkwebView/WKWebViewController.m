@@ -58,6 +58,7 @@ UIScrollViewDelegate>
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self webViewCache];
     //加载web页面
     [self webViewloadURLType];
  
