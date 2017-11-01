@@ -6,6 +6,7 @@
 #import <WebKit/WKWebView.h>
 #import <WebKit/WebKit.h>
 #import "BCObjectiveCJSHelper.h"
+#import "CustomURLCache.h"
 
 typedef enum{
     loadWebURLString = 0,
@@ -94,6 +95,15 @@ UIScrollViewDelegate>
     [self.wkWebView setUIDelegate:nil];
 }
 
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+    
+    CustomURLCache *urlCache = (CustomURLCache *)[NSURLCache sharedURLCache];
+    [urlCache removeAllCachedResponses];
+}
+
 //注意，观察的移除
 -(void)dealloc {
     [self.wkWebView removeObserver:self forKeyPath:NSStringFromSelector(@selector(estimatedProgress))];
@@ -146,6 +156,17 @@ UIScrollViewDelegate>
 }
 
 #pragma mark - 加载方式／私有方法
+// 网页缓存设置
+-(void) webViewCache {
+    //网页缓存设置
+    CustomURLCache *urlCache = [[CustomURLCache alloc] initWithMemoryCapacity:20 * 1024 * 1024
+                                                                 diskCapacity:200 * 1024 * 1024
+                                                                     diskPath:nil
+                                                                    cacheTime:0];
+    [CustomURLCache setSharedURLCache:urlCache];
+    
+}
+
 
 - (void)webViewloadURLType{
     switch (self.loadType) {

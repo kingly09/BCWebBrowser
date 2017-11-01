@@ -88,6 +88,16 @@ form.submit();\
     [web setupMinimumFontSize:self.minimumFontSize];
     [self.navigationController pushViewController:web animated:YES];    
 }
+// 30 s随机数
+- (IBAction)OnClickRandomNumber:(id)sender {
+    
+    WKWebViewController *web = [[WKWebViewController alloc] init];
+    NSString *inputValueJS = @"var psel = document.getElementById('uin');psel.value = '测试自动输入账号121';var pswd = document.getElementById('pwd');pswd.value = '123';";
+    [web automaticLoginWebURLSring:@"http://10.100.0.141:8091/wanhuaka/h5.html" injectJSCode:inputValueJS];
+    [web setupMinimumFontSize:self.minimumFontSize];
+    [self.navigationController pushViewController:web animated:YES];
+    
+}
 
 #pragma mark 点击search跳到搜索结果页
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {

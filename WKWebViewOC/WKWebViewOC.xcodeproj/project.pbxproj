@@ -22,6 +22,9 @@
 		BC3680EC1FA855AA007D2358 /* test.html in Resources */ = {isa = PBXBuildFile; fileRef = BC3680EB1FA855AA007D2358 /* test.html */; };
 		BC3680EF1FA8668B007D2358 /* BCObjectiveCJSHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BC3680EE1FA8668B007D2358 /* BCObjectiveCJSHelper.m */; };
 		BC4AAFD81FA9568B0035502F /* msg.html in Resources */ = {isa = PBXBuildFile; fileRef = BC4AAFD71FA9568B0035502F /* msg.html */; };
+		BCC015F51FA973DD0001BCE1 /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = BCC015F31FA973DC0001BCE1 /* Util.m */; };
+		BCC015F61FA973DD0001BCE1 /* CustomURLCache.m in Sources */ = {isa = PBXBuildFile; fileRef = BCC015F41FA973DD0001BCE1 /* CustomURLCache.m */; };
+		BCC015F91FA973E70001BCE1 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = BCC015F71FA973E70001BCE1 /* Reachability.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +72,12 @@
 		BC3680F11FA877A0007D2358 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		BC3680F21FA877A9007D2358 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		BC4AAFD71FA9568B0035502F /* msg.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = msg.html; sourceTree = "<group>"; };
+		BCC015F11FA973DC0001BCE1 /* CustomURLCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomURLCache.h; sourceTree = "<group>"; };
+		BCC015F21FA973DC0001BCE1 /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
+		BCC015F31FA973DC0001BCE1 /* Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Util.m; sourceTree = "<group>"; };
+		BCC015F41FA973DD0001BCE1 /* CustomURLCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomURLCache.m; sourceTree = "<group>"; };
+		BCC015F71FA973E70001BCE1 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		BCC015F81FA973E70001BCE1 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,6 +172,7 @@
 		3AE0BCDD1E1D58300013055C /* WkwebView */ = {
 			isa = PBXGroup;
 			children = (
+				BCC015F01FA973D10001BCE1 /* WebViewCache */,
 				BC4AAFD71FA9568B0035502F /* msg.html */,
 				BC3680EB1FA855AA007D2358 /* test.html */,
 				3AE0BCDE1E1D58300013055C /* backItemImage@2x.png */,
@@ -183,6 +193,19 @@
 				BC3680F11FA877A0007D2358 /* AddressBook.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BCC015F01FA973D10001BCE1 /* WebViewCache */ = {
+			isa = PBXGroup;
+			children = (
+				BCC015F81FA973E70001BCE1 /* Reachability.h */,
+				BCC015F71FA973E70001BCE1 /* Reachability.m */,
+				BCC015F11FA973DC0001BCE1 /* CustomURLCache.h */,
+				BCC015F41FA973DD0001BCE1 /* CustomURLCache.m */,
+				BCC015F21FA973DC0001BCE1 /* Util.h */,
+				BCC015F31FA973DC0001BCE1 /* Util.m */,
+			);
+			path = WebViewCache;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -329,9 +352,12 @@
 			files = (
 				BC3680EF1FA8668B007D2358 /* BCObjectiveCJSHelper.m in Sources */,
 				3AE0BC781E1D570F0013055C /* ViewController.m in Sources */,
+				BCC015F91FA973E70001BCE1 /* Reachability.m in Sources */,
 				3AE0BCE61E1D58300013055C /* WKWebViewController.m in Sources */,
 				3AE0BC751E1D570F0013055C /* AppDelegate.m in Sources */,
+				BCC015F61FA973DD0001BCE1 /* CustomURLCache.m in Sources */,
 				3AE0BC721E1D570F0013055C /* main.m in Sources */,
+				BCC015F51FA973DD0001BCE1 /* Util.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
