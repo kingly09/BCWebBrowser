@@ -104,6 +104,21 @@ form.submit();\
     [self.navigationController pushViewController:web animated:YES];
     
 }
+- (IBAction)cacheBaiduHtml:(id)sender {
+
+    WKWebViewController *web = [[WKWebViewController alloc] init];
+    
+    NSString *metaJScript = @"document.getElementsByTagName('html')[0].setAttribute('manifest','demo_html.appcache');";
+    
+    NSString *randomNumJS = @"function randomNum(Min,Max){var Range = Max - Min;var Rand =  Math.random();return(Min + Math.round(Rand * Range));} document.getElementsByTagName('title')[0].innerHTML = '测试随机数';document.getElementsByTagName('p')[0].innerHTML = '测试3s随机数';var num = randomNum(1000000,100000000);  document.getElementsByTagName('p')[1].innerHTML = num;function randomNumInnerHTML() { var num = randomNum(1000000,100000000);  document.getElementsByTagName('p')[1].innerHTML = num; } setInterval('randomNumInnerHTML();', 3000); ";
+    
+    NSString *inputValueJS = [NSString stringWithFormat:@"%@%@",metaJScript,randomNumJS];
+    
+    [web automaticLoginWebURLSring:@"https://m.baidu.com/" injectJSCode:inputValueJS];
+    [web setupMinimumFontSize:self.minimumFontSize];
+    [self.navigationController pushViewController:web animated:YES];
+    
+}
 
 #pragma mark 点击search跳到搜索结果页
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {

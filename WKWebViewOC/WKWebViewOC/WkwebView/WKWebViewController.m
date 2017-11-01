@@ -198,9 +198,9 @@ UIScrollViewDelegate>
 // 加载一个WEB的URL地址网页
 -(void) loadWebWithURLString:(NSString *)url {
     //创建一个NSURLRequest 的对象,加入缓存机制，缓存时间为30s
-    NSURLRequest * Request_zsj = [NSURLRequest requestWithURL:[NSURL URLWithString:self.URLString] cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30];
+    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:self.URLString] cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:300000];
     //加载网页
-    [self.wkWebView loadRequest:Request_zsj];
+    [self.wkWebView loadRequest:urlRequest];
 }
 // 加载一个本地HTML网页
 - (void)loadLocalHtmlString:(NSString *)url{
@@ -372,6 +372,11 @@ UIScrollViewDelegate>
     //开始加载的时候，让加载进度条显示
     self.progressView.hidden = NO;
     NSLog(@"页面开始加载");
+    NSString *metaJScript = @"document.getElementsByTagName('html')[0].setAttribute('manifest','demo_html.appcache');";
+    [self.wkWebView evaluateJavaScript:metaJScript completionHandler:^(id _Nullable response, NSError * _Nullable error) {
+        NSLog(@"value: %@ error: %@", response, error);
+    }];
+  
 }
 // 加载内容
 -(void)webView:(WKWebView *)webView didCommitNavigation:(WKNavigation *)navigation
@@ -610,7 +615,7 @@ UIScrollViewDelegate>
 //        WKUserScript *wkUScript = [[WKUserScript alloc] initWithSource:metaJScript injectionTime:WKUserScriptInjectionTimeAtDocumentEnd forMainFrameOnly:YES];
 //        [UserContentController addUserScript:wkUScript];
         // 是否支持记忆读取
-//        Configuration.suppressesIncrementalRendering = YES;
+        Configuration.suppressesIncrementalRendering = YES;
         // 允许用户更改网页的设置
         Configuration.userContentController = UserContentController;
         
