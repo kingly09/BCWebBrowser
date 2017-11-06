@@ -45,6 +45,8 @@ UIScrollViewDelegate>
 @property (nonatomic, copy) NSString *injectJSCode;
 //保存请求链接
 @property (nonatomic)NSMutableArray* snapShotsArray;
+//设置底部的菜单
+@property (nonatomic)NSMutableArray *menuButtonList;
 //返回按钮
 @property (nonatomic)UIBarButtonItem* customBackBarItem;
 //关闭按钮

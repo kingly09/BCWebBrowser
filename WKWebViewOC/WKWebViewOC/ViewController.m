@@ -24,12 +24,18 @@ document.body.appendChild(form);\
 form.submit();\
 }"
 
+#import "BCButtonModel.h"
+#import <YYKit/YYKit.h>
 
-@interface ViewController ()<UISearchBarDelegate>
+@interface ViewController ()<UISearchBarDelegate>{
+    
+     NSMutableArray *menuButtonList; //推荐达人
+}
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (assign,nonatomic) BOOL isPost;
 //设置字体大小
 @property(nonatomic,assign) float minimumFontSize;
+
 @end
 
 @implementation ViewController
@@ -38,8 +44,17 @@ form.submit();\
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     self.title = @"BC WebBrowser浏览器";
+    
+    [self getMenuButtonList];
 }
 
+-(void)getMenuButtonList {
+    
+    NSArray *lists = [NSArray modelArrayWithClass:[BCButtonModel class] json:[NSData dataNamed:[NSString stringWithFormat:@"menuList.geojson"]]];
+    menuButtonList = [NSMutableArray arrayWithArray:lists];
+    
+    NSLog(@"menuButtonList ::%@",menuButtonList);
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

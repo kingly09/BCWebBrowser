@@ -8,6 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol BCSubButtonModel <NSObject>
+
+@end
+
 @interface BCSubButtonModel : NSObject
 
 @property (nonatomic,copy) NSString  *type;         // 顶级菜单的button的类型

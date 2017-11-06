@@ -23,6 +23,8 @@
 		AC55F5B677D298AAC7953C9C /* Pods_WKWebViewOCUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89A36C248EC1AC48CCF1AADC /* Pods_WKWebViewOCUITests.framework */; };
 		BC3680EC1FA855AA007D2358 /* test.html in Resources */ = {isa = PBXBuildFile; fileRef = BC3680EB1FA855AA007D2358 /* test.html */; };
 		BC3680EF1FA8668B007D2358 /* BCObjectiveCJSHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BC3680EE1FA8668B007D2358 /* BCObjectiveCJSHelper.m */; };
+		BC391BE11FAC02DB004D7AF7 /* menuList.geojson in Resources */ = {isa = PBXBuildFile; fileRef = BC391BE01FAC02DB004D7AF7 /* menuList.geojson */; };
+		BC391BE41FAC04EE004D7AF7 /* BCBottomToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = BC391BE31FAC04EE004D7AF7 /* BCBottomToolBar.m */; };
 		BC4AAFD81FA9568B0035502F /* msg.html in Resources */ = {isa = PBXBuildFile; fileRef = BC4AAFD71FA9568B0035502F /* msg.html */; };
 		BC5AC5F41FAAA9F900943CDD /* BCButtonModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BC5AC5F31FAAA9F900943CDD /* BCButtonModel.m */; };
 		BC5AC5FA1FAAAA5700943CDD /* BCSubButtonModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BC5AC5F91FAAAA5700943CDD /* BCSubButtonModel.m */; };
@@ -83,6 +85,9 @@
 		BC3680EE1FA8668B007D2358 /* BCObjectiveCJSHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BCObjectiveCJSHelper.m; sourceTree = "<group>"; };
 		BC3680F11FA877A0007D2358 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		BC3680F21FA877A9007D2358 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
+		BC391BE01FAC02DB004D7AF7 /* menuList.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = menuList.geojson; sourceTree = "<group>"; };
+		BC391BE21FAC04EE004D7AF7 /* BCBottomToolBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BCBottomToolBar.h; sourceTree = "<group>"; };
+		BC391BE31FAC04EE004D7AF7 /* BCBottomToolBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BCBottomToolBar.m; sourceTree = "<group>"; };
 		BC4AAFD71FA9568B0035502F /* msg.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = msg.html; sourceTree = "<group>"; };
 		BC5AC5F21FAAA9F900943CDD /* BCButtonModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BCButtonModel.h; sourceTree = "<group>"; };
 		BC5AC5F31FAAA9F900943CDD /* BCButtonModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BCButtonModel.m; sourceTree = "<group>"; };
@@ -208,6 +213,7 @@
 		3AE0BCDD1E1D58300013055C /* WkwebView */ = {
 			isa = PBXGroup;
 			children = (
+				BC391BE01FAC02DB004D7AF7 /* menuList.geojson */,
 				BC5AC5F11FAAA9D700943CDD /* Model */,
 				BCC015F01FA973D10001BCE1 /* WebViewCache */,
 				BC4AAFD71FA9568B0035502F /* msg.html */,
@@ -220,6 +226,8 @@
 				BC3680ED1FA8668B007D2358 /* BCObjectiveCJSHelper.h */,
 				BC3680EE1FA8668B007D2358 /* BCObjectiveCJSHelper.m */,
 				BC2FEA381FA9CEEE009BEAC2 /* menu.geojson */,
+				BC391BE21FAC04EE004D7AF7 /* BCBottomToolBar.h */,
+				BC391BE31FAC04EE004D7AF7 /* BCBottomToolBar.m */,
 			);
 			path = WkwebView;
 			sourceTree = "<group>";
@@ -379,6 +387,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BC391BE11FAC02DB004D7AF7 /* menuList.geojson in Resources */,
 				BC3680EC1FA855AA007D2358 /* test.html in Resources */,
 				3AE0BCE31E1D58300013055C /* backItemImage@2x.png in Resources */,
 				BC4AAFD81FA9568B0035502F /* msg.html in Resources */,
@@ -563,6 +572,7 @@
 			files = (
 				BC3680EF1FA8668B007D2358 /* BCObjectiveCJSHelper.m in Sources */,
 				3AE0BC781E1D570F0013055C /* ViewController.m in Sources */,
+				BC391BE41FAC04EE004D7AF7 /* BCBottomToolBar.m in Sources */,
 				BCC015F91FA973E70001BCE1 /* Reachability.m in Sources */,
 				BC5AC5F41FAAA9F900943CDD /* BCButtonModel.m in Sources */,
 				3AE0BCE61E1D58300013055C /* WKWebViewController.m in Sources */,
