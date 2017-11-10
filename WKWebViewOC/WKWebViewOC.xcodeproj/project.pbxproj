@@ -170,6 +170,7 @@
 		3AE0BC6F1E1D570F0013055C /* WKWebViewOC */ = {
 			isa = PBXGroup;
 			children = (
+				BC1D89B31FB5428000179FAE /* MX5Browser */,
 				3AE0BCDD1E1D58300013055C /* WkwebView */,
 				3AE0BC731E1D570F0013055C /* AppDelegate.h */,
 				3AE0BC741E1D570F0013055C /* AppDelegate.m */,
@@ -230,6 +231,30 @@
 				BC391BE31FAC04EE004D7AF7 /* BCBottomToolBar.m */,
 			);
 			path = WkwebView;
+			sourceTree = "<group>";
+		};
+		BC1D89B31FB5428000179FAE /* MX5Browser */ = {
+			isa = PBXGroup;
+			children = (
+				BC1D89B41FB5449200179FAE /* View */,
+				BC1D89B51FB5449200179FAE /* Controller */,
+			);
+			name = MX5Browser;
+			path = ../../MX5Browser;
+			sourceTree = "<group>";
+		};
+		BC1D89B41FB5449200179FAE /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		BC1D89B51FB5449200179FAE /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		BC3680F01FA877A0007D2358 /* Frameworks */ = {
@@ -339,7 +364,7 @@
 		3AE0BC651E1D570F0013055C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				CLASSPREFIX = BC;
+				CLASSPREFIX = MX5;
 				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "Bamboocloud Co., Ltd.";
 				TargetAttributes = {
