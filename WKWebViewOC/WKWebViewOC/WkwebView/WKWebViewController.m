@@ -44,7 +44,7 @@ UIScrollViewDelegate>
 //注入js代码
 @property (nonatomic, copy) NSString *injectJSCode;
 //保存请求链接
-@property (nonatomic)NSMutableArray* snapShotsArray;
+@property (nonatomic) NSMutableArray* snapShotsArray;
 //设置底部的菜单
 @property (nonatomic)NSMutableArray *menuButtonList;
 //返回按钮

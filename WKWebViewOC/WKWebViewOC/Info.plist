@@ -33,8 +33,6 @@
 	<string>App需要您的同意,才能访问日历</string>
 	<key>NSCameraUsageDescription</key>
 	<string>App需要您的同意,才能访问相机</string>
-	<key>NSContactsUsageDescription</key>
-	<string></string>
 	<key>NSHealthShareUsageDescription</key>
 	<string>App需要您的同意,才能访问健康分享</string>
 	<key>NSHealthUpdateUsageDescription</key>
