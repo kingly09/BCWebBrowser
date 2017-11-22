@@ -78,8 +78,15 @@ function openAlbum(){
 }
 
 //打开app的定位信息
-function openPositioning(){
-    window.webkit.messageHandlers.timefor.postMessage({code: '0004', functionName: 'openPositioning'});
+function getAppInfo(){
+    
+     window.webkit.messageHandlers.epass.postMessage({code: '0004', functionName: 'show'});
+}
+
+function show(u) {
+    
+    document.getElementById('temp').innerHTML = u;
+    
 }
 
 </script>

@@ -289,7 +289,7 @@ UIScrollViewDelegate>
 -(void)updateNavigationItems{
     if (self.wkWebView.canGoBack) {
         UIBarButtonItem *spaceButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-        spaceButtonItem.width = -6.5;
+        spaceButtonItem.width = - 6.5;
 
         [self.navigationItem setLeftBarButtonItems:@[spaceButtonItem,self.customBackBarItem,self.closeButtonItem] animated:NO];
     }else{

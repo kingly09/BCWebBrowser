@@ -214,7 +214,6 @@
 		3AE0BCDD1E1D58300013055C /* WkwebView */ = {
 			isa = PBXGroup;
 			children = (
-				BC391BE01FAC02DB004D7AF7 /* menuList.geojson */,
 				BC5AC5F11FAAA9D700943CDD /* Model */,
 				BCC015F01FA973D10001BCE1 /* WebViewCache */,
 				BC4AAFD71FA9568B0035502F /* msg.html */,
@@ -275,6 +274,7 @@
 				BC5AC5F21FAAA9F900943CDD /* BCButtonModel.h */,
 				BC5AC5F31FAAA9F900943CDD /* BCButtonModel.m */,
 				BC5AC5F81FAAAA5700943CDD /* BCSubButtonModel.h */,
+				BC391BE01FAC02DB004D7AF7 /* menuList.geojson */,
 				BC5AC5F91FAAAA5700943CDD /* BCSubButtonModel.m */,
 			);
 			path = Model;
