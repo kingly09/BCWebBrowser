@@ -31,6 +31,7 @@
 		BCC015F51FA973DD0001BCE1 /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = BCC015F31FA973DC0001BCE1 /* Util.m */; };
 		BCC015F61FA973DD0001BCE1 /* CustomURLCache.m in Sources */ = {isa = PBXBuildFile; fileRef = BCC015F41FA973DD0001BCE1 /* CustomURLCache.m */; };
 		BCC015F91FA973E70001BCE1 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = BCC015F71FA973E70001BCE1 /* Reachability.m */; };
+		BCC8FB811FC5D580004B6768 /* H5应用的接入.pdf in Resources */ = {isa = PBXBuildFile; fileRef = BCC8FB801FC5D580004B6768 /* H5应用的接入.pdf */; };
 		DBB8EF3C06553796CCEF487F /* Pods_WKWebViewOC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F71246B29C5BE1BD33F32BD0 /* Pods_WKWebViewOC.framework */; };
 /* End PBXBuildFile section */
 
@@ -99,6 +100,7 @@
 		BCC015F41FA973DD0001BCE1 /* CustomURLCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomURLCache.m; sourceTree = "<group>"; };
 		BCC015F71FA973E70001BCE1 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		BCC015F81FA973E70001BCE1 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		BCC8FB801FC5D580004B6768 /* H5应用的接入.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "H5应用的接入.pdf"; sourceTree = "<group>"; };
 		E3AC146AFF7E5FA2A05A666E /* Pods_WKWebViewOCTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WKWebViewOCTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F71246B29C5BE1BD33F32BD0 /* Pods_WKWebViewOC.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WKWebViewOC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8AFB8723DBE84FBC0473D2B /* Pods-WKWebViewOC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WKWebViewOC.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WKWebViewOC/Pods-WKWebViewOC.debug.xcconfig"; sourceTree = "<group>"; };
@@ -170,7 +172,6 @@
 		3AE0BC6F1E1D570F0013055C /* WKWebViewOC */ = {
 			isa = PBXGroup;
 			children = (
-				BC1D89B31FB5428000179FAE /* MX5Browser */,
 				3AE0BCDD1E1D58300013055C /* WkwebView */,
 				3AE0BC731E1D570F0013055C /* AppDelegate.h */,
 				3AE0BC741E1D570F0013055C /* AppDelegate.m */,
@@ -232,30 +233,6 @@
 			path = WkwebView;
 			sourceTree = "<group>";
 		};
-		BC1D89B31FB5428000179FAE /* MX5Browser */ = {
-			isa = PBXGroup;
-			children = (
-				BC1D89B41FB5449200179FAE /* View */,
-				BC1D89B51FB5449200179FAE /* Controller */,
-			);
-			name = MX5Browser;
-			path = ../../MX5Browser;
-			sourceTree = "<group>";
-		};
-		BC1D89B41FB5449200179FAE /* View */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		BC1D89B51FB5449200179FAE /* Controller */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Controller;
-			sourceTree = "<group>";
-		};
 		BC3680F01FA877A0007D2358 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -283,6 +260,7 @@
 		BCC015F01FA973D10001BCE1 /* WebViewCache */ = {
 			isa = PBXGroup;
 			children = (
+				BCC8FB801FC5D580004B6768 /* H5应用的接入.pdf */,
 				BCC015F81FA973E70001BCE1 /* Reachability.h */,
 				BCC015F71FA973E70001BCE1 /* Reachability.m */,
 				BCC015F11FA973DC0001BCE1 /* CustomURLCache.h */,
@@ -412,6 +390,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BCC8FB811FC5D580004B6768 /* H5应用的接入.pdf in Resources */,
 				BC391BE11FAC02DB004D7AF7 /* menuList.geojson in Resources */,
 				BC3680EC1FA855AA007D2358 /* test.html in Resources */,
 				3AE0BCE31E1D58300013055C /* backItemImage@2x.png in Resources */,

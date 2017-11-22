@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <WebKit/WebKit.h>
 
-#define KWebGetDeviceID @"timefor"      //获取APP的端的设备ID
+#define KWebGetDeviceID @"epass"      //把一个名为 epass 的 ScriptMessageHandler 注册到我们的 wk。
 
 @protocol BCObjectiveCJSHelperDelegate <NSObject>
 @optional

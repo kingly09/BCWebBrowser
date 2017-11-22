@@ -72,8 +72,14 @@ CLLocationManagerDelegate>
                 NSLog(@"打开app的定位信息");
                 [self openPositioning];
                 return;
-            }else {
+            }else if ([dic[@"functionName"] isEqualToString:@"showUserInfo"]) {
+                NSLog(@"打开app的定位信息");
+                NSString *jsFuction = dic[@"functionName"];
+                NSString *uid = [NSString stringWithFormat:@"uid111111"];
+                NSString *js = [NSString stringWithFormat:@"%@(\'%@\')",jsFuction,uid];
+                [self.webView evaluateJavaScript:js completionHandler:nil];
                 return;
+                
             }
         });
     } else {
