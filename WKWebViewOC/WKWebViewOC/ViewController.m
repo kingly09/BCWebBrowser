@@ -139,7 +139,7 @@ form.submit();\
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     
     WKWebViewController *web = [[WKWebViewController alloc] init];
-    [web loadWebURLSring:searchBar.text];
+    [web loadWebURLSring:@"http://10.100.0.83:8080/docs/test/qingjia.html"];
     [web setupMinimumFontSize:self.minimumFontSize];
     [self.navigationController pushViewController:web animated:YES];
 

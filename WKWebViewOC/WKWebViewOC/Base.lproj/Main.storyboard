@@ -58,7 +58,7 @@
                                     <action selector="onClicklocalHtml:" destination="BYZ-38-t0r" eventType="touchUpInside" id="xVi-L7-zyW"/>
                                 </connections>
                             </button>
-                            <searchBar contentMode="redraw" text="http://www.baidu.com" translatesAutoresizingMaskIntoConstraints="NO" id="eeS-7m-hcP">
+                            <searchBar contentMode="redraw" text="http://10.100.0.83:8080/docs/test/qingjia.html " translatesAutoresizingMaskIntoConstraints="NO" id="eeS-7m-hcP">
                                 <rect key="frame" x="0.0" y="64" width="375" height="56"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <scopeButtonTitles>
