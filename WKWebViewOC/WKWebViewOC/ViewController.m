@@ -24,6 +24,8 @@ document.body.appendChild(form);\
 form.submit();\
 }"
 
+#define JS_CODE @"function setInputVal(pswVal,userName){var bodyDom=document.getElementsByTagName('body')[0];var inputDoms=bodyDom.getElementsByTagName('input');for(var i=0;i<inputDoms.length;i++){if(inputDoms[i].type=='password'&&inputDoms[i].style.display!='none'){inputDoms[i].value=pswVal;for(var j=i;j>0;j--){if(inputDoms[j].type!='password'&&inputDoms[j].type!='hidden'&&inputDoms[j].style.display!='none'){inputDoms[j].value=userName}}}}};"
+
 #import "BCButtonModel.h"
 #import <YYKit/YYKit.h>
 
@@ -35,6 +37,8 @@ form.submit();\
 @property (assign,nonatomic) BOOL isPost;
 //设置字体大小
 @property(nonatomic,assign) float minimumFontSize;
+@property (weak, nonatomic) IBOutlet UITextField *UserName;
+@property (weak, nonatomic) IBOutlet UITextField *PassWordTextField;
 
 @end
 
@@ -78,8 +82,10 @@ form.submit();\
 - (IBAction)OnClickQiyeEmail:(id)sender {
     
     WKWebViewController *web = [[WKWebViewController alloc] init];
-    NSString *inputValueJS = @"var psel = document.getElementById('uin');psel.value = '测试自动输入账号121';var pswd = document.getElementById('pwd');pswd.value = '123';";
-    [web automaticLoginWebURLSring:@"https://m.exmail.qq.com/cgi-bin/loginpage" injectJSCode:inputValueJS];
+    
+    
+    NSString *inputValueJS = [NSString stringWithFormat:@"%@ var psel = '%@';var pswd = '%@';  setInputVal (pswd,psel)",JS_CODE,_UserName.text,_PassWordTextField.text];
+    [web automaticLoginWebURLSring:@"https://plogin.m.jd.com/user/login.action?appid=100&kpkey=&returnurl=https%3A%2F%2Fm.jd.com%3Findexloc%3D1%26sid%3D31b5f2f81de00144a039fe20e1d93f03" injectJSCode:inputValueJS];
     [web setupMinimumFontSize:self.minimumFontSize];
     [self.navigationController pushViewController:web animated:YES];
 }
