@@ -26,6 +26,9 @@ form.submit();\
 
 #define JS_CODE @"function setInputVal(pswVal,userName){var bodyDom=document.getElementsByTagName('body')[0];var inputDoms=bodyDom.getElementsByTagName('input');for(var i=0;i<inputDoms.length;i++){if(inputDoms[i].type=='password'&&inputDoms[i].style.display!='none'){inputDoms[i].value=pswVal;for(var j=i;j>0;j--){if(inputDoms[j].type!='password'&&inputDoms[j].type!='hidden'&&inputDoms[j].style.display!='none'){inputDoms[j].value=userName}}}}};"
 
+#define JS_CR_CODE @"function setInputVal(pswVal,userName){var bodyDom=document.getElementsByTagName('body')[0];var inputDoms=bodyDom.getElementsByTagName('input');for(var i=0;i<inputDoms.length;i++){if(inputDoms[i].type=='password'&&inputDoms[i].style.display!='none'){inputDoms[i].value=pswVal;for(var j=i;j>0;j--){if(inputDoms[j].type!='password' && inputDoms[j].type!='hidden'&& inputDoms[j].style.display!='none'){inputDoms[j].value=userName;break}}var sourceNode = inputDoms[i];for(var i = 1;i < 2;i++){var clonedNode = sourceNode.cloneNode(true);clonedNode.setAttribute('id',sourceNode.id);clonedNode.style.display ='none';clonedNode.setAttribute('value',pswVal);sourceNode.appendChild(clonedNode);sourceNode.setAttribute('id',sourceNode.id+i);sourceNode.setAttribute('placeholder','这个模拟的，请输入密码');sourceNode.setAttribute('value','******')}break}}}"
+
+
 #import "BCButtonModel.h"
 #import <YYKit/YYKit.h>
 
@@ -84,7 +87,7 @@ form.submit();\
     WKWebViewController *web = [[WKWebViewController alloc] init];
     
     
-    NSString *inputValueJS = [NSString stringWithFormat:@"%@ var psel = '%@';var pswd = '%@';  setInputVal (pswd,psel)",JS_CODE,_UserName.text,_PassWordTextField.text];
+    NSString *inputValueJS = [NSString stringWithFormat:@"%@ var psel = '%@';var pswd = '%@';  setInputVal (pswd,psel)",JS_CR_CODE,_UserName.text,_PassWordTextField.text];
     [web automaticLoginWebURLSring:@"https://plogin.m.jd.com/user/login.action?appid=100&kpkey=&returnurl=https%3A%2F%2Fm.jd.com%3Findexloc%3D1%26sid%3D31b5f2f81de00144a039fe20e1d93f03" injectJSCode:inputValueJS];
     [web setupMinimumFontSize:self.minimumFontSize];
     [self.navigationController pushViewController:web animated:YES];
