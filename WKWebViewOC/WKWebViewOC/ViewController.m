@@ -85,10 +85,13 @@ form.submit();\
 - (IBAction)OnClickQiyeEmail:(id)sender {
     
     WKWebViewController *web = [[WKWebViewController alloc] init];
-    
-    
-    NSString *inputValueJS = [NSString stringWithFormat:@"%@ var psel = '%@';var pswd = '%@';  setInputVal (pswd,psel)",JS_CR_CODE,_UserName.text,_PassWordTextField.text];
-    [web automaticLoginWebURLSring:@"https://plogin.m.jd.com/user/login.action?appid=100&kpkey=&returnurl=https%3A%2F%2Fm.jd.com%3Findexloc%3D1%26sid%3D31b5f2f81de00144a039fe20e1d93f03" injectJSCode:inputValueJS];
+  
+
+
+//  NSString *inputValueJS = [NSString stringWithFormat:@"var sPhoneNumber = document.getElementById('phoneNumber');sPhoneNumber.value = '%@'; %@  setInputVal (pswd,psel);",_UserName.text,JS_CR_CODE,_UserName.text,_PassWordTextField.text];
+  
+  NSString *inputValueJS = [NSString stringWithFormat:@"%@ var psel = '%@';var pswd = '%@';  setInputVal (pswd,psel); var sPhoneNumber = document.getElementById('phoneNumber');sPhoneNumber.value = '%@';",JS_CR_CODE,_UserName.text,_PassWordTextField.text,_UserName.text];
+    [web automaticLoginWebURLSring:@"http://m.iqiyi.com/user.html#baseLogin" injectJSCode:inputValueJS];
     [web setupMinimumFontSize:self.minimumFontSize];
     [self.navigationController pushViewController:web animated:YES];
 }
